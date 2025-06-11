@@ -1,9 +1,5 @@
 .App-background {
     background-image: url('../public/images/background.png');
-    background-size: cover;
-    background-repeat: repeat;
-    object-fit: fill;
-
     height: 100vh;
     text-align: center;
 }
