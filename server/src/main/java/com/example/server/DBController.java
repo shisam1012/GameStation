@@ -3,33 +3,35 @@ package com.example.server;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBController {
 
-    // טעינת דרייבר MySQL פעם אחת כשמחלקה נטענת
+    //Loading the driver one time
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            // אפשר גם לזרוק RuntimeException אם רוצים לעצור את האפליקציה
         }
     }
 
-    // יצירת חיבור ל-DB
+    //Creating a new connection to the DB 
+    //Using JDBC for the connection
+    //******* !!!handle a connection pool ******* */
     public static Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/gamestation?serverTimezone=UTC&useSSL=false";
+        String url = "jdbc:mysql://localhost:3306/gamestation";
         String user = "root";
         String password = "SD!123sa";
         return DriverManager.getConnection(url, user, password);
     }
 
-    // הכנסת משתמש לטבלה
+    //This function inserts a new user into the users table
     public static void insertUser(User user) throws SQLException {
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                 "INSERT INTO users (username, email, password) VALUES (?, ?, ?)")) {
+                PreparedStatement stmt = conn.prepareStatement(
+                        "INSERT INTO users (username, email, password) VALUES (?, ?, ?)")) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
@@ -37,4 +39,18 @@ public class DBController {
             stmt.executeUpdate();
         }
     }
-}
+    
+    public static boolean checkUser(User user) throws SQLException {
+        try (Connection conn = getConnection();
+                PreparedStatement stmt = conn.prepareStatement(
+                        "SELECT * FROM users WHERE username = ? AND password = ?")) {
+
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+            ResultSet rs = stmt.executeQuery();
+
+            
+            return rs.next();
+        }
+    }
+} 
