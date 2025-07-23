@@ -1,9 +1,9 @@
 import { submitRegisterData } from './RegisterDB.js';
-//import { UserLogin } from '../context/LoginContext';
-import { useNavigate } from 'react-router-dom';
+import { AccessLoginContextProvider } from '../context/LoginContext.js';
+
 export function validateForm({ username, password }) {
     const errors = {};
-    //const { userLoggedIn, setUserLoggedIn } = UserLogin();!!!
+
     if (!username) errors.username = 'Username is required';
     //if (!email) errors.email = 'Email is required';
     //else if (!validateEmail(email)) errors.email = 'Invalid email address';
@@ -14,19 +14,12 @@ export function validateForm({ username, password }) {
     return errors;
 }
 
-export function handleSubmit({
-    username,
-    password,
-    setUserLoggedIn,
-    userLoggedIn,
-    navigate,
-}) {
+export function handleSubmit({ username, password, navigate }) {
     submitRegisterData({ username, password })
         .then((data) => {
             console.log('✅ Registered:', data);
-            setUserLoggedIn({ username });
+            AccessLoginContextProvider.setUserLoggedIn({ username });
             console.log('.....');
-            console.log(userLoggedIn);
             navigate('/');
         })
         .catch((err) => {
@@ -34,13 +27,7 @@ export function handleSubmit({
         });
 }
 
-export function createOnSubmit(
-    { username, password },
-    setErrors,
-    setUserLoggedIn,
-    userLoggedIn,
-    navigate
-) {
+export function createOnSubmit({ username, password }, setErrors, navigate) {
     return function (e) {
         e.preventDefault();
         const errors = validateForm({
@@ -51,8 +38,6 @@ export function createOnSubmit(
             handleSubmit({
                 username,
                 password,
-                setUserLoggedIn,
-                userLoggedIn,
                 navigate,
             });
         } else {
