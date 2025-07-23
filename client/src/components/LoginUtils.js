@@ -1,4 +1,4 @@
-import { submitRegisterData } from './RegisterDB.js';
+import { submitRegisterData } from './LoginDB.js';
 import { AccessLoginContextProvider } from '../context/LoginContext.js';
 
 export function validateForm({ username, password }) {

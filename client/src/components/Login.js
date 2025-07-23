@@ -1,7 +1,7 @@
-import { createOnSubmit } from './RegisterUtils';
+import { createOnSubmit } from './LoginUtils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-function Register() {
+function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -48,4 +48,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default Login;

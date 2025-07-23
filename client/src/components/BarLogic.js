@@ -5,7 +5,7 @@ export function onClickSignUp(navigate) {
     navigate('/SignUp');
 }
 
-export function onClickRegister(navigate) {
-    console.log('register clicked');
-    navigate('/Register');
+export function onClickLogin(navigate) {
+    console.log('login clicked');
+    navigate('/Login');
 }
