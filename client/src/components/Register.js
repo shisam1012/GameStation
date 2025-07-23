@@ -1,13 +1,21 @@
 import { createOnSubmit } from './RegisterUtils';
 import { useState } from 'react';
-
+import { UserLogin } from '../context/LoginContext';
+import { useNavigate } from 'react-router-dom';
 function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const [errors, setErrors] = useState({});
-
-    const onSubmit = createOnSubmit({ username, password }, setErrors);
+    const { userLoggedIn, setUserLoggedIn } = UserLogin();
+    const navigate = useNavigate();
+    const onSubmit = createOnSubmit(
+        { username, password },
+        setErrors,
+        setUserLoggedIn,
+        userLoggedIn,
+        navigate
+    );
 
     return (
         <div>
