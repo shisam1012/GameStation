@@ -13,6 +13,9 @@ function Lobby() {
     const [connect4ImageSrc, connect4SetImageSrc] = useState(
         './images/connect4.png'
     );
+
+    /*<div className='lobby-background'>*/
+
     return (
         <div>
             <Bar />

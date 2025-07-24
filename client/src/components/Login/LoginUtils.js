@@ -1,5 +1,5 @@
 import { submitRegisterData } from './LoginDB.js';
-import { AccessLoginContextProvider } from '../context/LoginContext.js';
+import { AccessLoginContextProvider } from '../../context/LoginContext.js';
 
 export function validateForm({ username, password }) {
     const errors = {};
