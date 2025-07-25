@@ -22,17 +22,14 @@ public class PlayConnect4Controller {
     }
 
     @GetMapping("/play-connect-4")
-    public ResponseEntity<?> registerUser(@RequestParam String username, @RequestParam String difficulty) {
+    public ResponseEntity<?> connect4Player(@RequestParam String username, @RequestParam String difficulty) {
         
-
-             String playerInfo = username + ":" + difficulty;
-        jmsTemplate.convertAndSend("game.queue", playerInfo);
-            
-           
-            System.out.println("Player " + username + " wants to play in " + difficulty + " mode");
+        String playerInfo = username + ":" + difficulty;
+        jmsTemplate.convertAndSend("connect4easy.queue", playerInfo);
+        System.out.println("Player " + username + " wants to play in " + difficulty + " mode");
 
             
-            return ResponseEntity.ok(Map.of("message", "User in the queue"));
+        return ResponseEntity.ok(Map.of("message", "User in the queue"));
              
         
     }

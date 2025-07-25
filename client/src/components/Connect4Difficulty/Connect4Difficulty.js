@@ -2,7 +2,7 @@ import Select from 'react-select';
 import { useState } from 'react';
 import { createOnSubmit } from './DifficultyUtils';
 import { useNavigate } from 'react-router-dom';
-import { UserLogin } from '../context/LoginContext';
+import { UserLogin } from '../../context/LoginContext';
 
 function Connect4Difficulty() {
     const options = [

@@ -4,7 +4,7 @@ import './App.css';
 import Lobby from './components/Lobby.js';
 import SignUp from './components/Signup/SignUp.js';
 import Login from './components/Login/Login.js';
-import Connect4Difficulty from './components/Connect4Difficulty.js';
+import Connect4Difficulty from './components/Connect4Difficulty/Connect4Difficulty.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 //import { LoginContext } from './context/LoginContext.js';
 
