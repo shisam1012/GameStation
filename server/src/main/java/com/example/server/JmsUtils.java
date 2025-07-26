@@ -11,6 +11,6 @@ import org.apache.activemq.command.ActiveMQQueue;
 public class JmsUtils {
    @Bean
     public Queue gameQueue() {
-        return new ActiveMQQueue("game.queue");
+        return new ActiveMQQueue("connect4easy.queue");
     }  
 }
