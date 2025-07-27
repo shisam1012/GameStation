@@ -1,5 +1,7 @@
 //Using REST-API to send the register data to the server
 
+let connect4Socket = null;
+
 export function playConnect4({ username, difficulty }) {
     const data = new URLSearchParams({
         username,
@@ -16,24 +18,28 @@ export function playConnect4({ username, difficulty }) {
         .then((response) => {
             console.log(response.message);
 
-            const socket = new WebSocket('ws://localhost:8080/connect4-socket');
+            connect4Socket = new WebSocket(
+                'ws://localhost:8080/connect4-socket'
+            );
 
-            socket.onopen = () => {
+            connect4Socket.onopen = () => {
                 console.log('WebSocket connected');
-                socket.send(JSON.stringify({ type: 'init', username }));
+                connect4Socket.send(JSON.stringify({ type: 'init', username }));
             };
 
-            socket.onmessage = (event) => {
+            connect4Socket.onmessage = (event) => {
                 const message = JSON.parse(event.data);
                 console.log('WebSocket message:', message);
             };
-            socket.onerror = (error) => {
+
+            connect4Socket.onerror = (error) => {
                 console.error('WebSocket error:', error);
             };
-            socket.onclose = () => {
+
+            connect4Socket.onclose = () => {
                 console.log('WebSocket closed');
             };
 
-            //return socket;
+            return connect4Socket;
         });
 }
