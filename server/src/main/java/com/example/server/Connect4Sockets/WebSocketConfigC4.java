@@ -5,6 +5,11 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+/**
+ * WebSocket configuration class.
+ * Registers the WebSocket handler for Connect4.
+ */
+
 @Configuration
 @EnableWebSocket
 public class WebSocketConfigC4 implements WebSocketConfigurer {
@@ -17,7 +22,7 @@ public class WebSocketConfigC4 implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(handler, "/connect4-socket")
-                .setAllowedOrigins("*");
+        // Mapping the WebSocket endpoint
+        registry.addHandler(handler, "/connect4-socket").setAllowedOrigins("*");
     }
 }

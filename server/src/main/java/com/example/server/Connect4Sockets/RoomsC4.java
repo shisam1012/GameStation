@@ -11,6 +11,7 @@ public class RoomsC4 {
     private static final Map<String, List<WebSocketSession>> rooms = new ConcurrentHashMap<>();
 
     public static void addToRoom(String roomCode, WebSocketSession session) {
+        System.out.println("... In addToRoom ...");
         rooms.computeIfAbsent(roomCode, k -> new ArrayList<>()).add(session);
     }
 

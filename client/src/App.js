@@ -5,7 +5,9 @@ import Lobby from './components/Lobby.js';
 import SignUp from './components/Signup/SignUp.js';
 import Login from './components/Login/Login.js';
 import Connect4Difficulty from './components/Connect4Difficulty/Connect4Difficulty.js';
-import Connect4Game from './components/Connect4Game/Connect4Game.js';
+import GameRoomC4 from './components/Connect4Game/GameRoomC4.js';
+import GameRoomC4Wrapper from './components/Connect4Game/GameRoomC4Wrapper';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 //import { LoginContext } from './context/LoginContext.js';
 
@@ -21,7 +23,7 @@ function App() {
                         path='/Connect4Difficulty'
                         element={<Connect4Difficulty />}
                     />
-                    <Route path='/Connect4Game' element={<Connect4Game />} />
+                    <Route path='/GameRoomC4' element={<GameRoomC4Wrapper />} />
                 </Routes>
             </Router>
         </div>
