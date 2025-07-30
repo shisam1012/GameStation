@@ -49,7 +49,7 @@ public class Connect4WebSocketHandler extends TextWebSocketHandler {
             String username = (String) json.get("username");
             String difficulty = (String) json.get("difficulty");
             sessionManager.addSession(username, session);
-            System.out.println("User connected: " + username);
+            System.out.println("User sent init message: " + username);
             jmsTemplate.convertAndSend("connect4" + difficulty.toLowerCase() + ".queue", username);// + ":" + difficulty);
 
 

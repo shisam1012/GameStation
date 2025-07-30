@@ -49,9 +49,9 @@ public class JmsListenerConnect4 {
     }
     
    private void handleReceivePlayer(Queue<String> waitingPlayers) {
-        if (waitingPlayers.size() == 1) {
+       if (waitingPlayers.size() == 1) {
            String playerWaiting = waitingPlayers.peek();
-           if (playerWaiting != null && sessionManager.getSession(playerWaiting) == null) {
+           if (playerWaiting != null && sessionManager.getSession(playerWaiting) != null) {
                String waitMessage = "{\"type\": \"waiting\", \"message\": \"waiting for another player\"}";
                sessionManager.sendMessageToPlayer(playerWaiting, waitMessage);
                System.out.println("Sent waiting message to " + playerWaiting);
