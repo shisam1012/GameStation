@@ -14,6 +14,9 @@ import java.util.Queue;
 public class JmsListenerConnect4 {
 
     private final Queue<String> waitingPlayersEasy = new LinkedList<>();
+    private final Queue<String> waitingPlayersMedium = new LinkedList<>();
+    private final Queue<String> waitingPlayersHard = new LinkedList<>();
+    
     private final SocketsManagerC4 sessionManager;
 
     public JmsListenerConnect4(SocketsManagerC4 sessionManager) {
@@ -21,41 +24,63 @@ public class JmsListenerConnect4 {
     }
     
     /*Add a new player's username to the queue of players who want to play connect 4 in easy mode */
-   @JmsListener(destination = "connect4easy.queue")
-   public void receivePlayer(String username) {
-        System.out.println("... In receivePlayer ...");
-        System.out.println("recieved: " + username);
-        waitingPlayersEasy.add(username);
-        if (waitingPlayersEasy.size() == 1) { 
-            String playerWaiting = waitingPlayersEasy.peek();
-            if (playerWaiting != null) {
-                //String usernameWaiting = playerWaiting.split(":")[0];
-                String waitMessage = "{\"type\": \"waiting\", \"message\": \"waiting for another player\"}";
-                sessionManager.sendMessageToPlayer(playerWaiting, waitMessage);
-                System.out.println("Sent waiting message to " + playerWaiting);
-            }
-        }
-
-        if (waitingPlayersEasy.size() >= 2) { //we can start a game between 2 of them
-            String username1 = waitingPlayersEasy.poll();
-            String username2 = waitingPlayersEasy.poll();
-            System.out.println("Can start a game between " + username1 + " and " + username2);
-
-            if (sessionManager.getSession(username1) == null || sessionManager.getSession(username2) == null) {
-                waitingPlayersEasy.add(username1);
-                waitingPlayersEasy.add(username2);
-                return;
-            }
-        
-            String jsonMessage1 = String.format("{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\"}", username2);
-            String jsonMessage2 = String.format("{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\"}", username1);
-            //sending to the players that a match is found via the socket
-            sessionManager.sendMessageToPlayer(username1, jsonMessage1);
-            System.out.println("Sent match message to " + username1);
-            sessionManager.sendMessageToPlayer(username2, jsonMessage2);
-            System.out.println("Sent match message to " + username2);
-        }
+    @JmsListener(destination = "connect4easy.queue")
+    public void receivePlayerEasy(String username) {
+       System.out.println("... In receivePlayerEasy ...");
+       System.out.println("recieved: " + username);
+       waitingPlayersEasy.add(username);
+       handleReceivePlayer(waitingPlayersEasy);
     }
+    
+   @JmsListener(destination = "connect4medium.queue")
+    public void receivePlayerMedium(String username) {
+       System.out.println("... In receivePlayerMedium ...");
+       System.out.println("recieved: " + username);
+       waitingPlayersMedium.add(username);
+       handleReceivePlayer(waitingPlayersMedium);
+    }
+    
+   @JmsListener(destination = "connect4hard.queue")
+    public void receivePlayerHard(String username) {
+       System.out.println("... In receivePlayerHard ...");
+       System.out.println("recieved: " + username);
+       waitingPlayersHard.add(username);
+       handleReceivePlayer(waitingPlayersHard);
+    }
+    
+   private void handleReceivePlayer(Queue<String> waitingPlayers) {
+        if (waitingPlayers.size() == 1) {
+           String playerWaiting = waitingPlayers.peek();
+           if (playerWaiting != null && sessionManager.getSession(playerWaiting) == null) {
+               String waitMessage = "{\"type\": \"waiting\", \"message\": \"waiting for another player\"}";
+               sessionManager.sendMessageToPlayer(playerWaiting, waitMessage);
+               System.out.println("Sent waiting message to " + playerWaiting);
+           }
+       }
+
+       if (waitingPlayers.size() >= 2) { //we can start a game between 2 of them
+           String username1 = waitingPlayers.poll();
+           String username2 = waitingPlayers.poll();
+           System.out.println("Can start a game between " + username1 + " and " + username2);
+            //if the socket is not open yet - return the players back to the queue
+           if (sessionManager.getSession(username1) == null || sessionManager.getSession(username2) == null) {
+               waitingPlayers.add(username1);
+               waitingPlayers.add(username2);
+               return;
+           }
+
+           String jsonMessage1 = String.format(
+                   "{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\"}", username2);
+           String jsonMessage2 = String.format(
+                   "{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\"}", username1);
+           //sending to the players that a match is found via the socket
+           sessionManager.sendMessageToPlayer(username1, jsonMessage1);
+           System.out.println("Sent match message to " + username1);
+           sessionManager.sendMessageToPlayer(username2, jsonMessage2);
+           System.out.println("Sent match message to " + username2);
+       }
+    
+   }
     
   
 }

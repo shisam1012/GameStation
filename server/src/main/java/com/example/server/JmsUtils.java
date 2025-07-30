@@ -10,7 +10,15 @@ import org.apache.activemq.command.ActiveMQQueue;
 @Configuration
 public class JmsUtils {
    @Bean
-    public Queue gameQueue() {
-        return new ActiveMQQueue("connect4easy.queue");
-    }  
+   public Queue easyQueue() {
+       return new ActiveMQQueue("connect4easy.queue");
+   }
+    @Bean
+    public Queue mediumQueue() {
+        return new ActiveMQQueue("connect4medium.queue");
+    }
+    @Bean
+    public Queue hardQueue() {
+        return new ActiveMQQueue("connect4hard.queue");
+    } 
 }
