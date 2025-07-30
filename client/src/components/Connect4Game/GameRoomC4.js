@@ -9,13 +9,12 @@ function GameRoomC4({ socket, username }) {
 
         const onMessage = (event) => {
             try {
+                console.log('... IN onMessage in GameRoomC4 ...');
                 const data = JSON.parse(event.data);
                 if (data.type === 'match') {
                     setStatusMessage(data.message || 'נמצא שחקן!');
                     setGameStarted(true);
-                    // בהמשך כאן נטען את הלוח למשל
                 } else {
-                    // הודעות רגילות
                     console.log('Unhandled message:', data);
                 }
             } catch (err) {
@@ -36,7 +35,6 @@ function GameRoomC4({ socket, username }) {
             <p>{statusMessage}</p>
             {gameStarted && (
                 <div>
-                    {/* בהמשך נטען כאן את קומפוננט הלוח */}
                     <p>הלוח יוצג כאן בהמשך</p>
                 </div>
             )}

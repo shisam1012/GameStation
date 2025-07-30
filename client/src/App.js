@@ -5,7 +5,7 @@ import Lobby from './components/Lobby.js';
 import SignUp from './components/Signup/SignUp.js';
 import Login from './components/Login/Login.js';
 import Connect4Difficulty from './components/Connect4Difficulty/Connect4Difficulty.js';
-import GameRoomC4 from './components/Connect4Game/GameRoomC4.js';
+//import GameRoomC4 from './components/Connect4Game/GameRoomC4.js';
 import GameRoomC4Wrapper from './components/Connect4Game/GameRoomC4Wrapper';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';

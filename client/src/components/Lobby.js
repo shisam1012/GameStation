@@ -19,13 +19,7 @@ function Lobby() {
     return (
         <div>
             <Bar />
-            <p>logo place</p>
-            <div>
-                <p>
-                    text text text text text text text text text text t e x t t
-                    e x t
-                </p>
-            </div>
+
             <img
                 className='image-button'
                 src={connect4ImageSrc}

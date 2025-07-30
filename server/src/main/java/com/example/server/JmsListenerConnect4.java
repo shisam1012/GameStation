@@ -2,85 +2,60 @@ package com.example.server;
 
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-
 import com.example.server.Connect4Sockets.SocketsManagerC4;
-
-//import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Listens to the Connect4 game queue and matches players.
+ * Listens to the Connect 4 game queue and matches players.
  */
 
 @Component
 public class JmsListenerConnect4 {
 
-    private final Queue<String> waitingPlayers = new LinkedList<>();
+    private final Queue<String> waitingPlayersEasy = new LinkedList<>();
     private final SocketsManagerC4 sessionManager;
 
     public JmsListenerConnect4(SocketsManagerC4 sessionManager) {
         this.sessionManager = sessionManager;
     }
     
-
+    /*Add a new player's username to the queue of players who want to play connect 4 in easy mode */
    @JmsListener(destination = "connect4easy.queue")
-   public void receivePlayer(String playerInfo) {
+   public void receivePlayer(String username) {
         System.out.println("... In receivePlayer ...");
-        System.out.println("recieved: " + playerInfo);
-        waitingPlayers.add(playerInfo);
-        if (waitingPlayers.size() == 1) {
-            String playerWaiting = waitingPlayers.peek();
+        System.out.println("recieved: " + username);
+        waitingPlayersEasy.add(username);
+        if (waitingPlayersEasy.size() == 1) { 
+            String playerWaiting = waitingPlayersEasy.peek();
             if (playerWaiting != null) {
-                String usernameWaiting = playerWaiting.split(":")[0];
-                String waitMessage = "{\"type\": \"waiting\", \"message\": \"ממתין לשחקן נוסף...\"}";
-                sessionManager.sendMessageToPlayer(usernameWaiting, waitMessage);
-                System.out.println("Sent waiting message to " + usernameWaiting);
+                //String usernameWaiting = playerWaiting.split(":")[0];
+                String waitMessage = "{\"type\": \"waiting\", \"message\": \"waiting for another player\"}";
+                sessionManager.sendMessageToPlayer(playerWaiting, waitMessage);
+                System.out.println("Sent waiting message to " + playerWaiting);
             }
         }
 
-        if (waitingPlayers.size() >= 2) {
-        
-            String player1 = waitingPlayers.poll();
-            String player2 = waitingPlayers.poll();
-            System.out.println("can start a game between " + player1 + " and " + player2);
+        if (waitingPlayersEasy.size() >= 2) { //we can start a game between 2 of them
+            String username1 = waitingPlayersEasy.poll();
+            String username2 = waitingPlayersEasy.poll();
+            System.out.println("Can start a game between " + username1 + " and " + username2);
 
-            
-            if (player1.contains(":") && player2.contains(":")) {
-                String username1 = player1.split(":")[0];  
-                String username2 = player2.split(":")[0];
-                if (sessionManager.getSession(username1) == null || sessionManager.getSession(username2) == null) {
-                    // מישהו עדיין לא חיבר WebSocket – מחזירים אותם חזרה לתור
-                    waitingPlayers.add(player1);
-                    waitingPlayers.add(player2);
-                    return;
-                }
-            //  sessionManager.sendMessageToPlayer(username1, "You are matched with " + username2);
-            //  sessionManager.sendMessageToPlayer(username2, "You are matched with " + username1);
-                String jsonMessage1 = String.format("{\"type\": \"match\", \"message\": \"נמצא שחקן! אתה מול %s\"}", username2);
-                String jsonMessage2 = String.format("{\"type\": \"match\", \"message\": \"נמצא שחקן! אתה מול %s\"}", username1);
-
-                sessionManager.sendMessageToPlayer(username1, jsonMessage1);
-                System.out.println("Sent match message to " + username1);
-                sessionManager.sendMessageToPlayer(username2, jsonMessage2);
-                System.out.println("Sent match message to " + username2);
-
-            } else {
-                System.err.println("Player info format incorrect: " + player1 + ", " + player2);
+            if (sessionManager.getSession(username1) == null || sessionManager.getSession(username2) == null) {
+                waitingPlayersEasy.add(username1);
+                waitingPlayersEasy.add(username2);
+                return;
             }
-
-
-
-            /*try {
-                sessionManager.sendMessageToPlayer(player1, "You are matched with " + player2);
-                sessionManager.sendMessageToPlayer(player2, "You are matched with " + player1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
+        
+            String jsonMessage1 = String.format("{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\"}", username2);
+            String jsonMessage2 = String.format("{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\"}", username1);
+            //sending to the players that a match is found via the socket
+            sessionManager.sendMessageToPlayer(username1, jsonMessage1);
+            System.out.println("Sent match message to " + username1);
+            sessionManager.sendMessageToPlayer(username2, jsonMessage2);
+            System.out.println("Sent match message to " + username2);
         }
     }
     
-
-
-   
+  
 }
