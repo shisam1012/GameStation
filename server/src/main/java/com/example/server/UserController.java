@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.Map;
-@CrossOrigin(origins = "http://localhost:3000") // Allow requests from React frontend
+@CrossOrigin(origins = "*")//(origins = "http://localhost:3000") // Allow requests from React frontend
 @RestController
 @RequestMapping("/api")
 public class UserController {

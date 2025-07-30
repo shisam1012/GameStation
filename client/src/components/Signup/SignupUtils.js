@@ -35,6 +35,6 @@ export function createOnSubmit({ username, password, email }, setErrors) {
     };
 }
 
-function validateEmail(email) {
+/*function validateEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+}*/

@@ -1,0 +1,15 @@
+.image-button {
+    align-self: center;
+    width: calc(
+        12vmax + 2rem
+    ); /* Set width to 30% of the maximum viewport dimension */
+    height: auto; /* Maintain the aspect ratio */
+}
+
+.lobby-background {
+    background-image: url('/public/images/background.png');
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+}

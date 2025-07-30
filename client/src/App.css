@@ -1,11 +1,13 @@
-.App-background {
-    background-image: url('../public/images/background.png');
-    height: 100vh;
-    text-align: center;
-}
 .App-logo {
     height: 40vmin;
     pointer-events: none;
+}
+.App-background {
+    background-image: url('/public/images/background.png');
+    height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
