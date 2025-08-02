@@ -7,6 +7,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.server.Connect4Game.GameHandlerC4;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.util.Map;
@@ -21,10 +22,17 @@ public class Connect4WebSocketHandler extends TextWebSocketHandler {
     private final JmsTemplate jmsTemplate;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public Connect4WebSocketHandler(SocketsManagerC4 sessionManager, JmsTemplate jmsTemplate) {
+   /*  public Connect4WebSocketHandler(SocketsManagerC4 sessionManager, JmsTemplate jmsTemplate) {
         this.sessionManager = sessionManager;
         this.jmsTemplate = jmsTemplate;
-    }
+    }*/
+    private final GameHandlerC4 gameHandler;
+
+public Connect4WebSocketHandler(SocketsManagerC4 sessionManager, JmsTemplate jmsTemplate, GameHandlerC4 gameHandler) {
+    this.sessionManager = sessionManager;
+    this.jmsTemplate = jmsTemplate;
+    this.gameHandler = gameHandler;
+}
 
 
     @Override
@@ -52,15 +60,35 @@ public class Connect4WebSocketHandler extends TextWebSocketHandler {
             System.out.println("User sent init message: " + username);
             jmsTemplate.convertAndSend("connect4" + difficulty.toLowerCase() + ".queue", username);// + ":" + difficulty);
 
-
-
         }
+        if ("move".equals(type)) {
+    String username = (String) json.get("username"); // וודא ששם המשתמש נשלח גם בהודעת ה-move
+    Integer column = (Integer) json.get("column");
+
+    if (username != null && column != null) {
+        gameHandler.handleMove(username, column);
+    } else {
+        System.err.println("Invalid move message received: missing username or column");
+    }
+}
+
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("Connection closed. Status: " + status);
     }
+   /*  @Override
+public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    System.out.println("Connection closed. Status: " + status);
+
+    String username = sessionManager.getUsernameBySession(session);
+    if (username != null) {
+        gameHandler.removeGame(username);
+        sessionManager.removeSession(username);
+    }
+}*/
+
 
     public void sendToClient(WebSocketSession session, String msg) throws IOException {
         session.sendMessage(new TextMessage(msg));
