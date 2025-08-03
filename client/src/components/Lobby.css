@@ -4,6 +4,7 @@
         12vmax + 2rem
     ); /* Set width to 30% of the maximum viewport dimension */
     height: auto; /* Maintain the aspect ratio */
+    margin-top: 5vmax;
 }
 
 .lobby-background {

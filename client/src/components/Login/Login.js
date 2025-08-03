@@ -1,6 +1,7 @@
 import { createOnSubmit } from './LoginUtils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Bar from '../Bar';
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -15,6 +16,7 @@ function Login() {
 
     return (
         <div>
+            <Bar />
             <p>logo place</p>
 
             <p>Register page!</p>

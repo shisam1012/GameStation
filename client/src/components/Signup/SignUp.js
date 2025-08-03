@@ -1,6 +1,6 @@
 import { createOnSubmit } from './SignupUtils';
 import { useState } from 'react';
-
+import Bar from '../Bar';
 function SignUp() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -11,6 +11,7 @@ function SignUp() {
 
     return (
         <div>
+            <Bar />
             <p>logo place</p>
 
             <p>Sign up page!</p>
