@@ -17,9 +17,8 @@ function Login() {
     return (
         <div>
             <Bar />
-            <p>logo place</p>
 
-            <p>Register page!</p>
+            <p>login page!</p>
 
             <div>
                 <form onSubmit={onSubmit}>

@@ -11,6 +11,7 @@
         12vmax + 2rem
     ); /* Set width to 30% of the maximum viewport dimension */
     height: auto; /* Maintain the aspect ratio */
+    cursor: pointer;
 }
 .logo-image:hover {
     transform: scale(1.05);
@@ -18,6 +19,7 @@
 
 .button {
     background-color: coral;
+    font-size: 1.35rem;
     color: rgb(238, 232, 204);
     border-radius: 2vmax;
     border-color: coral;
@@ -26,6 +28,7 @@
     width: 8vmax;
     height: 4vmax;
     margin: 1vmax;
+    cursor: pointer;
 }
 .button:hover {
     transform: scale(1.1);
