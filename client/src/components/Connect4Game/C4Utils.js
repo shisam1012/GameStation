@@ -1,15 +1,21 @@
 import { useState } from 'react';
 
+export function popMessage(message) {
+    alert(message);
+}
+
 export function useGameUtilsC4(initialBoard) {
     const [board, setBoard] = useState(initialBoard);
     const [isMyTurn, setIsMyTurn] = useState(false);
-    const [statusMessage, setStatusMessage] = useState('ממתין לשחקן נוסף...');
+    const [statusMessage, setStatusMessage] = useState(
+        'waiting for another player...'
+    );
     const [gameStarted, setGameStarted] = useState(false);
 
     const startGame = (board, yourTurn, message) => {
         setBoard(board);
         setIsMyTurn(yourTurn);
-        setStatusMessage(message || 'המשחק התחיל!');
+        setStatusMessage(message || 'Game is starting :)');
         setGameStarted(true);
     };
 
@@ -19,13 +25,13 @@ export function useGameUtilsC4(initialBoard) {
     };
 
     const endGame = (message) => {
-        setStatusMessage(message || 'המשחק הסתיים');
+        setStatusMessage(message || 'Game over');
         setIsMyTurn(false);
         setGameStarted(false);
     };
 
     const invalidMove = (message) => {
-        alert(message || 'מהלך לא חוקי');
+        alert(message || 'Illegael move');
     };
 
     return {

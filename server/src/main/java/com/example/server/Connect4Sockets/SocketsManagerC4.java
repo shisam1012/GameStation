@@ -17,18 +17,42 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class SocketsManagerC4 implements DisposableBean{
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
+private final Map<WebSocketSession, String> sessionToUsername = new ConcurrentHashMap<>();
 
+   /*  public void addSession(String username, WebSocketSession session) {
+       sessions.put(username, session);
+   }*/
     public void addSession(String username, WebSocketSession session) {
-        sessions.put(username, session);
+    WebSocketSession oldSession = sessions.get(username);
+    if (oldSession != null && oldSession.isOpen()) {
+        try {
+            oldSession.close(CloseStatus.NORMAL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+    sessions.put(username, session);
+    sessionToUsername.put(session, username);
+}
+
+public String getUsernameBySession(WebSocketSession session) {
+    return sessionToUsername.get(session);
+}
 
     public WebSocketSession getSession(String username) {
         return sessions.get(username);
     }
 
-    public void removeSession(String username) {
+    /*public void removeSession(String username) {
         sessions.remove(username);
+    }*/
+    public void removeSession(String username) {
+    WebSocketSession session = sessions.remove(username);
+    if (session != null) {
+        sessionToUsername.remove(session);
     }
+}
+
     /**
      * Sends a message to a specified player - identified by the username.
      */

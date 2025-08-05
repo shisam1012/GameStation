@@ -78,9 +78,18 @@ private final GameHandlerC4 gameHandler;
 
             // if one of the sessions is not open, return them to the queue
             if (sessionManager.getSession(username1) == null || sessionManager.getSession(username2) == null) {
-                if (username1 != null) waitingPlayers.add(username1);
-                if (username2 != null) waitingPlayers.add(username2);
+                if (username1 != null)
+                    waitingPlayers.add(username1);
+                if (username2 != null)
+                    waitingPlayers.add(username2);
                 return;
+            }
+            if (username1.equals(username2)) {
+                String jsonMessage = String.format(
+                "{\"type\": \"duplicateError\", \"message\": \"You can\'t play against yourself...\"}"
+            );
+            sessionManager.sendMessageToPlayer(username1, jsonMessage);
+            return;
             }
 
             // Create the game
@@ -113,7 +122,13 @@ gameHandler.registerGame(username1, username2, game);
         }
     }
 
-  
+  public void removeFromAllQueues(String username) {
+    waitingPlayersEasy.remove(username);
+    waitingPlayersMedium.remove(username);
+    waitingPlayersHard.remove(username);
+    System.out.println("Removed " + username + " from all queues");
+}
+
     public Connect4Controller getGameForPlayer(String username) {
         return activeGames.get(username);
     }

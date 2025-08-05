@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-
+import { popMessage } from './C4Utils';
 export function useGameRoomC4S(socket, username, callbacks) {
     const { startGame, updateBoard, endGame, invalidMove } = callbacks;
 
@@ -29,6 +29,9 @@ export function useGameRoomC4S(socket, username, callbacks) {
                         break;
                     case 'invalidMove':
                         invalidMove(data.message);
+                        break;
+                    case 'duplicateError':
+                        popMessage(data.message);
                         break;
                     default:
                         console.log('Unhandled message:', data);

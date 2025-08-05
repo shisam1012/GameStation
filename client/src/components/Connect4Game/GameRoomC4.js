@@ -1,8 +1,20 @@
 import { useGameUtilsC4 } from './C4Utils';
 import { useGameRoomC4S } from './GameRoomC4S';
 import GameBoardUIC4 from './C4BoardUI';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useDisconnectOnLeave } from './LeaveC4';
 
 function GameRoomC4({ socket, username }) {
+    const location = useLocation();
+    console.log('[MOUNT] GameRoomC4 mounted');
+    useEffect(() => {
+        return () => {
+            console.log('[UNMOUNT] GameRoomC4 unmounted');
+        };
+    }, []);
+
+    useDisconnectOnLeave(socket, username);
     const {
         board,
         isMyTurn,
@@ -29,6 +41,73 @@ function GameRoomC4({ socket, username }) {
         if (!isMyTurn) return;
         sendMove(colIndex);
     };
+    /*useEffect(() => {
+        const sendLeave = () => {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({ type: 'leave', username }));
+            }
+        };
+
+        const handleBeforeUnload = () => {
+            sendLeave();
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'hidden') {
+                sendLeave();
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+            document.removeEventListener(
+                'visibilitychange',
+                handleVisibilityChange
+            );
+        };
+    }, [socket, username]);*/
+
+    useEffect(() => {
+        return () => {
+            if (window.location.pathname === '/GameRoomC4') {
+                // המשתמש לא באמת יצא – פשוט היה רענון או remount
+                return;
+            }
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                console.log('[UNMOUNT] sending leave');
+                socket.send(JSON.stringify({ type: 'leave', username }));
+            }
+        };
+    }, [socket, username]);
+
+    /*useEffect(() => {
+        return () => {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                console.log('[UNMOUNT] sending leave');
+                socket.send(JSON.stringify({ type: 'leave', username }));
+            }
+        };
+    }, [socket, username]);
+
+    // שליחת leave גם ברענון / סגירה
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                console.log('[BEFOREUNLOAD] sending leave');
+                socket.send(JSON.stringify({ type: 'leave', username }));
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [socket, username]);
+
+    console.log('location.pathname:', location.pathname);*/
 
     return (
         <div>
