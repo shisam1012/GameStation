@@ -19,7 +19,8 @@ export function handleSubmit({ username, password, email }) {
             console.log('✅ Registered:', data);
         })
         .catch((err) => {
-            console.error('❌ Error submitting data:', err.message);
+            alert(err.message);
+            //console.error('❌ Error submitting data:', err.message);
         });
 }
 

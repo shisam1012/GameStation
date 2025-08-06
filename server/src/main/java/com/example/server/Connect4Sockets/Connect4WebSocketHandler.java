@@ -116,7 +116,7 @@ public void afterConnectionClosed(WebSocketSession session, CloseStatus status) 
 
     String username = sessionManager.getUsernameBySession(session);
     if (username != null) {
-        gameHandler.removeGame(username); // אם צריך
+        gameHandler.removeGame(username);
         sessionManager.removeSession(username);
     }
 }

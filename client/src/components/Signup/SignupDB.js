@@ -7,8 +7,11 @@ export function submitSignupData({ username, email, password }) {
             email,
             password,
         }),
-    }).then((res) => {
-        if (!res.ok) throw new Error('Server error');
+    }).then(async (res) => {
+        if (!res.ok) {
+            const errorText = await res.text();
+            throw new Error(errorText || 'Unknown server error');
+        }
         return res.json();
     });
 }

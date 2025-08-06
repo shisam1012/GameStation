@@ -12,19 +12,37 @@ import java.util.Map;
 @RequestMapping("/api")
 public class UserController {
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> signupUser(@RequestBody User user) {
+   /*  @PostMapping("/signup")
+   public ResponseEntity<?> signupUser(@RequestBody User user) {
+      try {
+          DBController.insertUser(user);
+          return ResponseEntity.ok(Map.of("message", "User signed up successfully"));
+   
+      } catch (SQLException e) {
+          e.printStackTrace();
+          return ResponseEntity
+                  .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                  .body(Map.of("error", e.getMessage()));
+      }
+   }*/
+    
+   @PostMapping("/signup")
+    public ResponseEntity<String> signupUser(@RequestBody User user) {
         try {
-            DBController.insertUser(user);
-            return ResponseEntity.ok(Map.of("message", "User signed up successfully"));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
+        //if there is already a user with the same username or mail return an error
+        if (DBController.userExists(user.getUsername(), user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                                 .body("Username or email already exists.");
         }
+        //otherwise insert the user to the DB
+        DBController.insertUser(user);
+        return ResponseEntity.ok("User registered successfully!");
+    } catch (SQLException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("Server error");
     }
+}
+
     
     
     @GetMapping("/register")
