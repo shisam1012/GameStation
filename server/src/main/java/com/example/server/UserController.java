@@ -26,20 +26,36 @@ public class UserController {
       }
    }*/
     
-   @PostMapping("/signup")
-    public ResponseEntity<String> signupUser(@RequestBody User user) {
-        try {
-        //if there is already a user with the same username or mail return an error
-        if (DBController.userExists(user.getUsername(), user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                                 .body("Username or email already exists.");
-        }
-        //otherwise insert the user to the DB
+   /*  @PostMapping("/signup")
+   public ResponseEntity<String> signupUser(@RequestBody User user) {
+       try {
+           //if there is already a user with the same username or mail return an error
+           if (DBController.userExists(user.getUsername(), user.getEmail())) {
+               return ResponseEntity.status(HttpStatus.CONFLICT)
+                       .body("Username or email already exists.");
+           }
+           //otherwise insert the user to the DB
+           DBController.insertUser(user);
+           return ResponseEntity.ok("User registered successfully!");
+       } catch (SQLException e) {
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                   .body("Server error");
+       }
+   }*/
+
+@PostMapping("/signup")
+public ResponseEntity<Map<String, String>> signupUser(@RequestBody User user) {
+    try{if (DBController.userExists(user.getUsername(), user.getEmail())) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                             .body(Map.of("error", "Username or email already exists."));
+    }
+    
+    
         DBController.insertUser(user);
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     } catch (SQLException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body("Server error");
+                             .body(Map.of("error", "Database error: " + e.getMessage()));
     }
 }
 
