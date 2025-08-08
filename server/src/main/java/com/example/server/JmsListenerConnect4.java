@@ -27,11 +27,11 @@ public class JmsListenerConnect4 {
 
     private final SocketsManagerC4 sessionManager;
     private final Gson gson = new Gson();
-private final GameHandlerC4 gameHandler;
+    private final GameHandlerC4 gameHandler;
 
-/*public JmsListenerConnect4(SocketsManagerC4 sessionManager) {
-    this.sessionManager = sessionManager;
-}*/
+    /*public JmsListenerConnect4(SocketsManagerC4 sessionManager) {
+        this.sessionManager = sessionManager;
+    }*/
     public JmsListenerConnect4(SocketsManagerC4 sessionManager, GameHandlerC4 gameHandler) {
     this.sessionManager = sessionManager;
     this.gameHandler = gameHandler;
@@ -42,7 +42,7 @@ private final GameHandlerC4 gameHandler;
         System.out.println("... In receivePlayerEasy ...");
         System.out.println("received: " + username);
         waitingPlayersEasy.add(username);
-        handleReceivePlayer(waitingPlayersEasy);
+        handleReceivePlayer(waitingPlayersEasy,"easy");
     }
 
     @JmsListener(destination = "connect4medium.queue")
@@ -50,7 +50,7 @@ private final GameHandlerC4 gameHandler;
         System.out.println("... In receivePlayerMedium ...");
         System.out.println("received: " + username);
         waitingPlayersMedium.add(username);
-        handleReceivePlayer(waitingPlayersMedium);
+        handleReceivePlayer(waitingPlayersMedium, "medium");
     }
 
     @JmsListener(destination = "connect4hard.queue")
@@ -58,10 +58,10 @@ private final GameHandlerC4 gameHandler;
         System.out.println("... In receivePlayerHard ...");
         System.out.println("received: " + username);
         waitingPlayersHard.add(username);
-        handleReceivePlayer(waitingPlayersHard);
+        handleReceivePlayer(waitingPlayersHard, "hard");
     }
 
-    private void handleReceivePlayer(Queue<String> waitingPlayers) {
+    private void handleReceivePlayer(Queue<String> waitingPlayers, String difficulty) {
         if (waitingPlayers.size() == 1) {
             String playerWaiting = waitingPlayers.peek();
             if (playerWaiting != null && sessionManager.getSession(playerWaiting) != null) {
@@ -93,12 +93,8 @@ private final GameHandlerC4 gameHandler;
             }
 
             // Create the game
-            /*Connect4Controller game = new Connect4Controller(username1, username2);
-            activeGames.put(username1, game);
-            activeGames.put(username2, game);*/
-            Connect4Controller game = new Connect4Controller(username1, username2);
-gameHandler.registerGame(username1, username2, game);
-
+            Connect4Controller game = new Connect4Controller(username1, username2,difficulty);
+            gameHandler.registerGame(username1, username2, game);
 
             // Convert board to JSON
             String boardJson = gson.toJson(game.getBoard());
@@ -122,12 +118,12 @@ gameHandler.registerGame(username1, username2, game);
         }
     }
 
-  public void removeFromAllQueues(String username) {
-    waitingPlayersEasy.remove(username);
-    waitingPlayersMedium.remove(username);
-    waitingPlayersHard.remove(username);
-    System.out.println("Removed " + username + " from all queues");
-}
+    public void removeFromAllQueues(String username) {
+        waitingPlayersEasy.remove(username);
+        waitingPlayersMedium.remove(username);
+        waitingPlayersHard.remove(username);
+        System.out.println("Removed " + username + " from all queues");
+    }
 
     public Connect4Controller getGameForPlayer(String username) {
         return activeGames.get(username);

@@ -8,13 +8,16 @@ public class Connect4Controller {
     private String player2;
     private int currentPlayer; // 1 or 2
     private boolean isGameOver;
+    private String difficulty; //the score at the end of the game depands on the diffculty
 
-    public Connect4Controller(String player1, String player2) {
+    
+    public Connect4Controller(String player1, String player2, String difficulty) {
         this.player1 = player1;
         this.player2 = player2;
         this.board = new int[ROWS][COLS];
         this.currentPlayer = 1;
         this.isGameOver = false;
+        this.difficulty = difficulty;
     }
 
     /*
@@ -27,6 +30,10 @@ public class Connect4Controller {
 
     public int getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 
     public String getCurrentPlayerName() {

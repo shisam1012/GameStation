@@ -2,11 +2,11 @@ import { useGameUtilsC4 } from './C4Utils';
 import { useGameRoomC4S } from './GameRoomC4S';
 import GameBoardUIC4 from './C4BoardUI';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+//import { useLocation } from 'react-router-dom';
 import { useDisconnectOnLeave } from './LeaveC4';
 
 function GameRoomC4({ socket, username }) {
-    const location = useLocation();
+    //const location = useLocation();
     console.log('[MOUNT] GameRoomC4 mounted');
     useEffect(() => {
         return () => {
@@ -41,39 +41,10 @@ function GameRoomC4({ socket, username }) {
         if (!isMyTurn) return;
         sendMove(colIndex);
     };
-    /*useEffect(() => {
-        const sendLeave = () => {
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify({ type: 'leave', username }));
-            }
-        };
-
-        const handleBeforeUnload = () => {
-            sendLeave();
-        };
-
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === 'hidden') {
-                sendLeave();
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-            document.removeEventListener(
-                'visibilitychange',
-                handleVisibilityChange
-            );
-        };
-    }, [socket, username]);*/
 
     useEffect(() => {
         return () => {
             if (window.location.pathname === '/GameRoomC4') {
-                // המשתמש לא באמת יצא – פשוט היה רענון או remount
                 return;
             }
             if (socket && socket.readyState === WebSocket.OPEN) {
@@ -82,32 +53,6 @@ function GameRoomC4({ socket, username }) {
             }
         };
     }, [socket, username]);
-
-    /*useEffect(() => {
-        return () => {
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                console.log('[UNMOUNT] sending leave');
-                socket.send(JSON.stringify({ type: 'leave', username }));
-            }
-        };
-    }, [socket, username]);
-
-    // שליחת leave גם ברענון / סגירה
-    useEffect(() => {
-        const handleBeforeUnload = () => {
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                console.log('[BEFOREUNLOAD] sending leave');
-                socket.send(JSON.stringify({ type: 'leave', username }));
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, [socket, username]);
-
-    console.log('location.pathname:', location.pathname);*/
 
     return (
         <div>
@@ -132,124 +77,3 @@ function GameRoomC4({ socket, username }) {
 }
 
 export default GameRoomC4;
-
-/*import { useEffect, useState } from 'react';
-
-function GameRoomC4({ socket, username }) {
-    const [statusMessage, setStatusMessage] = useState('ממתין לשחקן נוסף...');
-    const [gameStarted, setGameStarted] = useState(false);
-    const [board, setBoard] = useState(
-        Array(6)
-            .fill(null)
-            .map(() => Array(7).fill(0))
-    );
-    const [isMyTurn, setIsMyTurn] = useState(false);
-
-    const handleColumnClick = (colIndex) => {
-        if (!isMyTurn || !socket) return;
-
-        socket.send(
-            JSON.stringify({
-                type: 'move',
-                column: colIndex,
-                username: username,
-            })
-        );
-    };
-
-    useEffect(() => {
-        if (!socket) return;
-
-        const onMessage = (event) => {
-            try {
-                console.log('... IN onMessage in GameRoomC4 ...');
-                const data = JSON.parse(event.data);
-
-                if (data.type === 'match') {
-                    setStatusMessage(data.message || 'נמצא שחקן!');
-                    setGameStarted(true);
-                    if (data.board) setBoard(data.board);
-                    if (data.yourTurn !== undefined) setIsMyTurn(data.yourTurn);
-                } else if (data.type === 'boardUpdate') {
-                    if (data.board) setBoard(data.board);
-                    if (data.yourTurn !== undefined) setIsMyTurn(data.yourTurn);
-                } else if (data.type === 'gameOver') {
-                    setStatusMessage(data.message || 'המשחק הסתיים');
-                    setIsMyTurn(false);
-                } else if (data.type === 'invalidMove') {
-                    alert(data.message || 'מהלך לא חוקי');
-                } else {
-                    console.log('Unhandled message:', data);
-                }
-            } catch (err) {
-                console.error('Error parsing WebSocket message:', err);
-            }
-        };
-
-        socket.addEventListener('message', onMessage);
-
-        return () => {
-            socket.removeEventListener('message', onMessage);
-        };
-    }, [socket]);
-
-    const renderCell = (value, rowIndex, colIndex) => {
-        let color = 'white';
-        if (value === 1) color = 'red';
-        if (value === 2) color = 'yellow';
-
-        const isClickable = rowIndex === 0 && isMyTurn;
-
-        return (
-            <td
-                key={colIndex}
-                onClick={
-                    isClickable ? () => handleColumnClick(colIndex) : undefined
-                }
-                style={{
-                    width: '50px',
-                    height: '50px',
-                    backgroundColor: color,
-                    border: '1px solid black',
-                    cursor: isClickable ? 'pointer' : 'default',
-                }}
-            ></td>
-        );
-    };
-
-    const renderBoard = () => {
-        return (
-            <table style={{ borderCollapse: 'collapse' }}>
-                <tbody>
-                    {board.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
-                            {row.map((cell, colIndex) =>
-                                renderCell(cell, rowIndex, colIndex)
-                            )}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        );
-    };
-
-    return (
-        <div>
-            <h1>hello {username}!</h1>
-            <p>{statusMessage}</p>
-            {gameStarted && (
-                <div>
-                    <h2>
-                        {isMyTurn
-                            ? 'your turn'
-                            : "waiting for your opponent's move"}
-                    </h2>
-                    {renderBoard()}
-                </div>
-            )}
-        </div>
-    );
-}
-
-export default GameRoomC4;
-*/

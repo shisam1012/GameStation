@@ -21,7 +21,9 @@ public class DBController {
     //Using JDBC for the connection
     //******* !!!handle a connection pool ******* */
     public static Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/gamestation";
+        //String url = "jdbc:mysql://localhost:3306/gamestation";
+        String url = "jdbc:mysql://localhost:3306/gamestation?useSSL=false&allowPublicKeyRetrieval=true";
+
         String user = "root";
         String password = "SD!123sa";
         return DriverManager.getConnection(url, user, password);

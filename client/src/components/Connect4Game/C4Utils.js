@@ -28,6 +28,7 @@ export function useGameUtilsC4(initialBoard) {
         setStatusMessage(message || 'Game over');
         setIsMyTurn(false);
         setGameStarted(false);
+        //!!!!!!!!add score!!!!!!
     };
 
     const invalidMove = (message) => {

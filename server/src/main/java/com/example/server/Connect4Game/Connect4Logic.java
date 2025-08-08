@@ -7,10 +7,6 @@ public class Connect4Logic {
 	//int [][] gameBoard = new int[NUM_ROWS][NUM_COLS];
 	
 	public boolean updateBoard(int [][] gameBoard,int col, int numPlayer) {
-		/*if (col < 0 || col >= NUM_COLS) {
-	        System.out.println("Column index out of bounds: " + col);
-	        return false;
-	    }*/
 		
 		if (gameBoard[0][col] == 0) {
 			for (int i = NUM_ROWS-1 ; i >=0 ; i--) {

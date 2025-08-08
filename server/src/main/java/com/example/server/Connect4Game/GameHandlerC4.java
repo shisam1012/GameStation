@@ -3,6 +3,7 @@ package com.example.server.Connect4Game;
 import com.example.server.Connect4Sockets.SocketsManagerC4;
 import com.google.gson.Gson;
 
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -50,9 +51,32 @@ public class GameHandlerC4 {
 
             String boardJson = gson.toJson(board);
             String winnerMessage = String.format(
-                "{\"type\": \"gameOver\", \"message\": \"You win!\", \"board\": %s}", boardJson);
+                    "{\"type\": \"gameOver\", \"message\": \"You win!\", \"board\": %s}", boardJson);
+           
             String loserMessage = String.format(
-                "{\"type\": \"gameOver\", \"message\": \"You lose!\", \"board\": %s}", boardJson);
+                    "{\"type\": \"gameOver\", \"message\": \"You lose!\", \"board\": %s}", boardJson);
+
+            try{   
+                switch (game.getDifficulty()) {
+                    case "easy":
+                        C4DBController.updateInfo(username, 1, 1);
+                        break;
+                    case "medium":
+                        C4DBController.updateInfo(username, 3, 1);
+                        break;
+                    case "hard":
+                        C4DBController.updateInfo(username, 5, 1);
+                        break;
+                }
+                C4DBController.updateInfo(getOpponent(username, game), 0, 0);
+        
+            }
+            catch(SQLException e){
+                String exception = String
+                        .format("{\"type\":\"exception\", \"message\": \"error while updating the score\"}");
+                    sendToPlayer(username, exception);
+                    sendToPlayer(getOpponent(username, game), exception);
+                }
 
             sendToPlayer(username, winnerMessage);
             sendToPlayer(getOpponent(username, game), loserMessage);
