@@ -5,6 +5,7 @@ import {
     onClickLogin,
     onClickSignOut,
     onClickLogo,
+    onClickHighscore,
 } from './BarLogic';
 import { UserLogin } from '../context/LoginContext';
 //import logo from '../images/logo2.png';
@@ -28,13 +29,13 @@ function Bar() {
                     <>
                         <button
                             className='button'
-                            onClick={() => onClickLogin(navigate)}
+                            onClick={() => onClickHighscore(navigate)}
                         >
                             highscore
                         </button>
                         <button
                             className='button'
-                            onClick={() => onClickSignOut()}
+                            onClick={() => onClickSignOut(navigate)}
                         >
                             sign out
                         </button>

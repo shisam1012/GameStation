@@ -7,6 +7,7 @@ import Login from './components/Login/Login.js';
 import Connect4Difficulty from './components/Connect4Difficulty/Connect4Difficulty.js';
 //import GameRoomC4 from './components/Connect4Game/GameRoomC4.js';
 import GameRoomC4Wrapper from './components/Connect4Game/GameRoomC4Wrapper';
+import HighscoreContainer from './components/Highscore/HighscoreUtils.js';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 //import { LoginContext } from './context/LoginContext.js';
@@ -24,6 +25,7 @@ function App() {
                         element={<Connect4Difficulty />}
                     />
                     <Route path='/GameRoomC4' element={<GameRoomC4Wrapper />} />
+                    <Route path='/Highscore' element={<HighscoreContainer />} />
                 </Routes>
             </Router>
         </div>

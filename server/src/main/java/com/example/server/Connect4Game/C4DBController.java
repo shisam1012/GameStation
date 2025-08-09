@@ -27,15 +27,18 @@ public class C4DBController {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public static void updateInfo(String username, int score, int win) throws SQLException{
+    public static void updateInfo(String username, int score, int win) throws SQLException {
         try (Connection conn = getConnection();
-         PreparedStatement stmt = conn.prepareStatement(
-             "Update user_info SET total_score=total_score+ ?, games_count=games_count + 1, wins_count =wins_count+? WHERE username =?")) {
+                PreparedStatement stmt = conn.prepareStatement(
+                        "Update user_info SET total_score=total_score+ ?, games_count=games_count + 1, wins_count =wins_count+? WHERE username =?")) {
             stmt.setInt(1, score);
             stmt.setInt(2, win);
-            stmt.setString(3,username);
+            stmt.setString(3, username);
             stmt.executeUpdate();
+        }
+
     }
-        
-    } 
+    
+    
+
 }

@@ -11,12 +11,18 @@ export function onClickLogin(navigate) {
     navigate('/Login');
 }
 
+export function onClickHighscore(navigate) {
+    //console.log('login clicked');
+    navigate('/Highscore');
+}
+
 export function onClickLogo(navigate) {
     //console.log('login clicked');
     navigate('/');
 }
 
-export function onClickSignOut() {
+export function onClickSignOut(navigate) {
     //console.log('SignOut clicked');
     AccessLoginContextProvider.setUserLoggedIn();
+    navigate('/');
 }
