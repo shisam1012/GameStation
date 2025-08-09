@@ -33,6 +33,9 @@ export function useGameRoomC4S(socket, username, callbacks) {
                     case 'duplicateError':
                         popMessage(data.message);
                         break;
+                    case 'exception':
+                        popMessage(data.message);
+                        break;
                     default:
                         console.log('Unhandled message:', data);
                 }

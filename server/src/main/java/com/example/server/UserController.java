@@ -61,7 +61,7 @@ public ResponseEntity<Map<String, String>> signupUser(@RequestBody User user) {
 
     
     
-    @GetMapping("/register")
+    @GetMapping("/login")
     public ResponseEntity<?> registerUser(@RequestParam String username, @RequestParam String password) {
         try {
             User user = new User();

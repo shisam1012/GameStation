@@ -23,7 +23,8 @@ export function handleSubmit({ username, password, navigate }) {
             navigate('/');
         })
         .catch((err) => {
-            console.error('❌ Error submitting data:', err.message);
+            alert(err.message);
+            //console.error('❌ Error submitting data:', err.message);
         });
 }
 

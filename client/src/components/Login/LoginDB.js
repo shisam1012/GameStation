@@ -6,11 +6,16 @@ export function submitRegisterData({ username, password }) {
         password, //still wothout hashing
     });
 
-    return fetch(`http://localhost:8080/api/register?${data.toString()}`, {
+    return fetch(`http://localhost:8080/api/login?${data.toString()}`, {
         method: 'GET',
-    }).then((res) => {
-        if (!res.ok) throw new Error('Server error');
-        return res.json();
+    }).then(async (res) => {
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || 'Unknown server error');
+        }
+
+        return data;
     });
 }
 
