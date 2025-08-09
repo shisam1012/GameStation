@@ -2,6 +2,8 @@ import { createOnSubmit } from './SignupUtils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Bar from '../Bar';
+import '../../CSS/form.css';
+
 function SignUp() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -17,56 +19,68 @@ function SignUp() {
     return (
         <div>
             <Bar />
-            <p>logo place</p>
 
-            <p>Sign up page!</p>
-
-            <div>
+            <div className='main-div'>
                 <form onSubmit={onSubmit}>
-                    <input
-                        type='text'
-                        placeholder='Username'
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    {errors.username && (
-                        <div style={{ color: 'red' }}>{errors.username}</div>
-                    )}
+                    <div className='input-field'>
+                        <input
+                            type='text'
+                            placeholder='Username'
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
 
-                    <input
-                        type='email'
-                        placeholder='Email'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    {errors.email && (
-                        <div style={{ color: 'red' }}>{errors.email}</div>
-                    )}
+                        <label>Enter your username:</label>
+                    </div>
+                    <div className='input-field'>
+                        <input
+                            type='email'
+                            placeholder='Email'
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
 
-                    <input
-                        type='password'
-                        placeholder='Password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <input
-                        type='password'
-                        placeholder=' Repeat password'
-                        value={repeatedPassword}
-                        onChange={(e) => setRepeatedPassword(e.target.value)}
-                    />
-                    {errors.password && (
-                        <div style={{ color: 'red' }}>{errors.password}</div>
-                    )}
-                    {errors.repeatedpassword && (
-                        <div style={{ color: 'red' }}>
-                            {errors.repeatedpassword}
-                        </div>
-                    )}
-
-                    <input type='submit' value='Submit' />
+                        <label>Enter your email:</label>
+                    </div>
+                    <div className='input-field'>
+                        <input
+                            type='password'
+                            placeholder='Password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <label>Enter your password:</label>
+                    </div>
+                    <div className='input-field'>
+                        <input
+                            type='password'
+                            placeholder=' Repeat password'
+                            value={repeatedPassword}
+                            onChange={(e) =>
+                                setRepeatedPassword(e.target.value)
+                            }
+                        />
+                        <label>Enter your password again please:</label>
+                    </div>
+                    <div>
+                        <input
+                            type='submit'
+                            className='button-form'
+                            value='Submit'
+                        />
+                    </div>
                 </form>
             </div>
+            {errors.username && (
+                <div style={{ color: 'red' }}>{errors.username}</div>
+            )}
+            {errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
+            {errors.password && (
+                <div style={{ color: 'red' }}>{errors.password}</div>
+            )}
+            {errors.repeatedpassword && (
+                <div style={{ color: 'red' }}>{errors.repeatedpassword}</div>
+            )}
         </div>
     );
 }
