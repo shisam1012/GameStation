@@ -4,6 +4,7 @@ import GameBoardUIC4 from './C4BoardUI';
 import { useEffect } from 'react';
 //import { useLocation } from 'react-router-dom';
 import { useDisconnectOnLeave } from './LeaveC4';
+import './C4Board.css';
 
 function GameRoomC4({ socket, username }) {
     //const location = useLocation();
