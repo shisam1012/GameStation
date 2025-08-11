@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { createOnSubmit } from './DifficultyUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserLogin } from '../../context/LoginContext';
-
+import '../../CSS/form.css';
 import BackButton from '../BackButton/BackButton';
 import Bar from '../Bar';
 function Connect4Difficulty() {
@@ -30,15 +30,34 @@ function Connect4Difficulty() {
         <div>
             <Bar />
             <BackButton />
-            <form onSubmit={onSubmit}>
-                <label>Choose difficulty:</label>
-                <Select
-                    options={options}
-                    value={difficulty}
-                    onChange={handleChange}
-                />
-                <input type='submit' value='Submit' />
-            </form>
+            <div className='main-div'>
+                <form onSubmit={onSubmit}>
+                    <label>Choose difficulty:</label>
+                    <Select
+                        options={options}
+                        value={difficulty}
+                        onChange={handleChange}
+                    />
+                    <div>
+                        <input
+                            type='submit'
+                            className='button-form'
+                            value='Submit'
+                        />
+                    </div>
+                </form>
+                <div className='text-info'>
+                    <p>
+                        For the Easy difficulty you will get 1 point for a win,
+                    </p>
+                    <p>For Medium - 3 points,</p>
+                    <p>And for Hard - 5 points.</p>
+                    <p>
+                        if you disconnect during the game - it will count as a
+                        loss and the opponent will get the points!
+                    </p>
+                </div>
+            </div>
         </div>
     );
 }

@@ -97,3 +97,15 @@ input::placeholder {
 .button-form:hover {
     transform: scale(1.1);
 }
+
+label {
+    color: azure;
+    font-size: 1.5rem;
+    margin-bottom: 1vmax;
+}
+
+.text-info {
+    color: rgb(11, 3, 44);
+    font-size: 1.2vmax;
+    text-align: left;
+}
