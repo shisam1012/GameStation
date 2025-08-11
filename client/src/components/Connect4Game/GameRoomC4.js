@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 //import { useLocation } from 'react-router-dom';
 import { useDisconnectOnLeave } from './LeaveC4';
 import './C4Board.css';
-
+import Bar from '../Bar';
+import BackButton from '../BackButton/BackButton';
 function GameRoomC4({ socket, username }) {
     //const location = useLocation();
     console.log('[MOUNT] GameRoomC4 mounted');
@@ -57,6 +58,8 @@ function GameRoomC4({ socket, username }) {
 
     return (
         <div>
+            <Bar />
+            <BackButton />
             <h1>hello {username}!</h1>
             <p>{statusMessage}</p>
             {gameStarted && (

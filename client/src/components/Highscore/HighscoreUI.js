@@ -1,8 +1,10 @@
 import Bar from '../Bar';
+import BackButton from '../BackButton/BackButton';
 function Highscore({ topScores = [], userInfo = null }) {
     return (
         <div>
             <Bar />
+            <BackButton />
             <h2>Top 10 Scores:</h2>
             {topScores.length === 0 ? (
                 <p>No scores found.</p>

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Bar from '../Bar';
 import '../../CSS/form.css';
-
+import BackButton from '../BackButton/BackButton';
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -19,6 +19,7 @@ function Login() {
     return (
         <div>
             <Bar />
+            <BackButton />
             <div className='main-div'>
                 <form onSubmit={onSubmit}>
                     <div className='input-field'>
