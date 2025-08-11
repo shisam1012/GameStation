@@ -2,7 +2,7 @@ import Bar from './Bar';
 import './Lobby.css';
 import { useNavigate } from 'react-router-dom';
 import { /*useEffect,*/ useState } from 'react';
-
+import { UserLogin } from '../context/LoginContext';
 import { onClickConnect4, onMouseDownConnect4 } from './LobbyUtils';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -13,7 +13,7 @@ function Lobby() {
     const [connect4ImageSrc, connect4SetImageSrc] = useState(
         './images/connect4.png'
     );
-
+    const { userLoggedIn } = UserLogin();
     const [show, setShow] = useState(false);
     const renderTooltip = (props) => (
         <Tooltip {...props} className='info-tooltip'>
@@ -40,7 +40,13 @@ function Lobby() {
                         onMouseDown={() =>
                             onMouseDownConnect4(connect4SetImageSrc)
                         }
-                        onClick={() => onClickConnect4(navigate)}
+                        onClick={() =>
+                            onClickConnect4(
+                                connect4SetImageSrc,
+                                navigate,
+                                userLoggedIn
+                            )
+                        }
                     />
                     <OverlayTrigger
                         show={show}
