@@ -110,13 +110,13 @@ public Connect4WebSocketHandler(SocketsManagerC4 sessionManager, JmsTemplate jms
        System.out.println("Connection closed. Status: " + status);
      
    }*/
-    @Override
+@Override
 public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     System.out.println("Connection closed. Status: " + status);
 
     String username = sessionManager.getUsernameBySession(session);
     if (username != null) {
-        gameHandler.removeGame(username);
+        gameHandler.handlePlayerDisconnected(username);  
         sessionManager.removeSession(username);
     }
 }

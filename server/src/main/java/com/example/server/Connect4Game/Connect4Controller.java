@@ -56,11 +56,11 @@ public class Connect4Controller {
 
     public String getPlayer1() {
     return player1;
-}
+    }
 
-public String getPlayer2() {
-    return player2;
-}
+    public String getPlayer2() {
+        return player2;
+    }
 
    
 }

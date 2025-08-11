@@ -47,10 +47,15 @@ public String getUsernameBySession(WebSocketSession session) {
         sessions.remove(username);
     }*/
     public void removeSession(String username) {
-    WebSocketSession session = sessions.remove(username);
-    if (session != null) {
-        sessionToUsername.remove(session);
+        WebSocketSession session = sessions.remove(username);
+        if (session != null) {
+            sessionToUsername.remove(session);
+        }
     }
+
+    public boolean isSocketOpen(String username) {
+    WebSocketSession session = getSession(username);  
+    return session != null && session.isOpen();
 }
 
     /**

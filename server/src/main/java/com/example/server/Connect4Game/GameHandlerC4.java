@@ -28,7 +28,8 @@ public class GameHandlerC4 {
 
     public void handleMove(String username, int column) {
         Connect4Controller game = activeGames.get(username);
-        if (game == null || game.isGameOver()) return;
+        if (game == null || game.isGameOver())
+            return;
 
         String currentPlayerName = game.getCurrentPlayerName();
         if (!currentPlayerName.equals(username)) {
@@ -38,25 +39,36 @@ public class GameHandlerC4 {
 
         int playerNumber = game.getCurrentPlayer();
         int[][] board = game.getBoard();
-
+        String opponent = getOpponent(username, game);
         boolean success = logic.updateBoard(board, column, playerNumber);
         if (!success) {
             sendToPlayer(username, "{\"type\": \"invalidMove\", \"message\": \"Invalid move\"}");
             return;
         }
 
-       
+        if (!sessionManager.isSocketOpen(opponent)) {
+            game.setGameOver(true);
+            updateScore(game, username, opponent);
+            String boardJson = gson.toJson(board);
+            String winnerMessage = String.format(
+                    "{\"type\": \"gameOver\", \"message\": \"You win! your opponent disconnected...\", \"board\": %s}", boardJson);
+            sendToPlayer(username, winnerMessage);
+            System.out.println("sending winning message after the opponent disconnected");
+             removeGame(username);
+            return;
+        }
         if (logic.winningBoard(board, playerNumber)) {
             game.setGameOver(true);
 
             String boardJson = gson.toJson(board);
             String winnerMessage = String.format(
                     "{\"type\": \"gameOver\", \"message\": \"You win!\", \"board\": %s}", boardJson);
-           
+
             String loserMessage = String.format(
                     "{\"type\": \"gameOver\", \"message\": \"You lose!\", \"board\": %s}", boardJson);
 
-            try{   
+                    updateScore(game, username, opponent);
+            /*try {
                 switch (game.getDifficulty()) {
                     case "easy":
                         C4DBController.updateInfo(username, 1, 1);
@@ -68,32 +80,67 @@ public class GameHandlerC4 {
                         C4DBController.updateInfo(username, 5, 1);
                         break;
                 }
-                C4DBController.updateInfo(getOpponent(username, game), 0, 0);
-        
-            }
-            catch(SQLException e){
+                C4DBController.updateInfo(opponent, 0, 0);
+
+            } catch (SQLException e) {
                 String exception = String
                         .format("{\"type\":\"exception\", \"message\": \"error while updating the score\"}");
-                    sendToPlayer(username, exception);
-                    sendToPlayer(getOpponent(username, game), exception);
-                }
+                sendToPlayer(username, exception);
+                sendToPlayer(opponent, exception);
+            }*/
 
             sendToPlayer(username, winnerMessage);
-            sendToPlayer(getOpponent(username, game), loserMessage);
+            sendToPlayer(opponent, loserMessage);
             return;
         }
 
-       
         game.switchTurn();
         String boardJson = gson.toJson(board);
 
         sendToPlayer(username, String.format(
-            "{\"type\": \"boardUpdate\", \"board\": %s, \"yourTurn\": false}", boardJson));
+                "{\"type\": \"boardUpdate\", \"board\": %s, \"yourTurn\": false}", boardJson));
 
         sendToPlayer(getOpponent(username, game), String.format(
-            "{\"type\": \"boardUpdate\", \"board\": %s, \"yourTurn\": true}", boardJson));
+                "{\"type\": \"boardUpdate\", \"board\": %s, \"yourTurn\": true}", boardJson));
     }
+public void handlePlayerDisconnected(String username) {
+    Connect4Controller game = activeGames.get(username);
+    if (game == null || game.isGameOver()) return;
 
+    String opponent = getOpponent(username, game);
+    game.setGameOver(true);
+    updateScore(game, opponent, username); 
+
+    String boardJson = gson.toJson(game.getBoard());
+    sendToPlayer(opponent, String.format("{\"type\": \"gameOver\", \"message\": \"You win! Your opponent disconnected.\", \"board\": %s}", boardJson));
+    sendToPlayer(username, String.format("{\"type\": \"gameOver\", \"message\": \"You disconnected.\", \"board\": %s}", boardJson));
+
+    removeGame(username);
+}
+
+    private void updateScore(Connect4Controller game,String username,String opponent ) {
+        try {
+                switch (game.getDifficulty()) {
+                    case "easy":
+                        C4DBController.updateInfo(username, 1, 1);
+                        break;
+                    case "medium":
+                        C4DBController.updateInfo(username, 3, 1);
+                        break;
+                    case "hard":
+                        C4DBController.updateInfo(username, 5, 1);
+                        break;
+                }
+                C4DBController.updateInfo(opponent, 0, 0);
+
+            } catch (SQLException e) {
+                String exception = String
+                        .format("{\"type\":\"exception\", \"message\": \"error while updating the score\"}");
+                sendToPlayer(username, exception);
+                sendToPlayer(opponent, exception);
+            }
+
+    }
     private void sendToPlayer(String username, String message) {
         sessionManager.sendMessageToPlayer(username, message);
     }
