@@ -1,4 +1,4 @@
-package com.example.server;
+package com.example.server.Auth;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DBController {
+public class UserDAO {
 
     //Loading the driver one time
     static {

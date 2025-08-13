@@ -4,8 +4,10 @@
 }
 
 .game-board {
-    border-collapse: collapse;
-    border: 0.4vmax solid black;
+    /* border-collapse: collapse; */
+    /* border: 0.4vmax solid black; */
+    background-color: #391515;
+    border: 0.4vmax solid #391515;
 }
 
 .game-cell {

@@ -1,4 +1,4 @@
-package com.example.server.Connect4Sockets;
+package com.example.server.Connect4.Sockets;
 
 import java.io.IOException;
 import java.util.Map;

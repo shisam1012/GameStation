@@ -1,8 +1,8 @@
 package com.example.server;
 
-import com.example.server.Connect4Game.Connect4Controller;
-import com.example.server.Connect4Game.GameHandlerC4;
-import com.example.server.Connect4Sockets.SocketsManagerC4;
+import com.example.server.Connect4.Game.Connect4Controller;
+import com.example.server.Connect4.Game.GameHandlerC4;
+import com.example.server.Connect4.Sockets.SocketsManagerC4;
 import com.google.gson.Gson;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;

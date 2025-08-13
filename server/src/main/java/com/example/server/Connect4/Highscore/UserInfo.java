@@ -1,4 +1,4 @@
-package com.example.server.HighscoreC4;
+package com.example.server.Connect4.Highscore;
 
 public class UserInfo {
     private String username;

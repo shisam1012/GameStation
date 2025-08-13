@@ -1,6 +1,6 @@
-package com.example.server.Connect4Game;
+package com.example.server.Connect4.Game;
 
-import com.example.server.Connect4Sockets.SocketsManagerC4;
+import com.example.server.Connect4.Sockets.SocketsManagerC4;
 import com.google.gson.Gson;
 
 import java.sql.SQLException;

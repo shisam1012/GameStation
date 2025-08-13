@@ -1,4 +1,4 @@
-package com.example.server.Connect4Game;
+package com.example.server.Connect4.Game;
 
 public class Connect4Controller {
     private final int ROWS = 6;

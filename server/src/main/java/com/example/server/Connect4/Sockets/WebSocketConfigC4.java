@@ -1,4 +1,4 @@
-package com.example.server.Connect4Sockets;
+package com.example.server.Connect4.Sockets;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
