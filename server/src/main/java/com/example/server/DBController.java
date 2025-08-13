@@ -21,23 +21,46 @@ public class DBController {
     //Using JDBC for the connection
     //******* !!!handle a connection pool ******* */
     public static Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/gamestation";
+        //String url = "jdbc:mysql://localhost:3306/gamestation";
+        String url = "jdbc:mysql://localhost:3306/gamestation?useSSL=false&allowPublicKeyRetrieval=true";
+
         String user = "root";
         String password = "SD!123sa";
         return DriverManager.getConnection(url, user, password);
     }
 
+    /*The username and email of every player should be unique */
+    public static boolean userExists(String username, String email) throws SQLException {
+    try (Connection conn = getConnection();
+         PreparedStatement stmt = conn.prepareStatement(
+             "SELECT * FROM users WHERE username = ? OR email = ?")) {
+
+        stmt.setString(1, username);
+        stmt.setString(2, email);
+        ResultSet rs = stmt.executeQuery(); //
+        return rs.next();
+    }
+}
+
+
     //This function inserts a new user into the users table
     public static void insertUser(User user) throws SQLException {
         try (Connection conn = getConnection();
-                PreparedStatement stmt = conn.prepareStatement(
-                        "INSERT INTO users (username, email, password) VALUES (?, ?, ?)")) {
+                PreparedStatement stmt1 = conn.prepareStatement(
+                        "INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+                        PreparedStatement stmt2 = conn.prepareStatement(
+                        "INSERT INTO user_info (username, wins_count, games_count, total_score) VALUES (?,0,0,0)")) {
 
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getEmail());
-            stmt.setString(3, user.getPassword());
-            stmt.executeUpdate();
+            stmt1.setString(1, user.getUsername());
+            stmt1.setString(2, user.getEmail());
+            stmt1.setString(3, user.getPassword());
+            stmt1.executeUpdate();
+
+            stmt2.setString(1, user.getUsername());
+            stmt2.executeUpdate();
         }
+
+
     }
     
     public static boolean checkUser(User user) throws SQLException {

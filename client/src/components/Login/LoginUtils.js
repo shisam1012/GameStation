@@ -1,4 +1,4 @@
-import { submitRegisterData } from './LoginDB.js';
+import { submitLoginData } from './LoginDB.js';
 import { AccessLoginContextProvider } from '../../context/LoginContext.js';
 
 export function validateForm({ username, password }) {
@@ -15,7 +15,7 @@ export function validateForm({ username, password }) {
 }
 
 export function handleSubmit({ username, password, navigate }) {
-    submitRegisterData({ username, password })
+    submitLoginData({ username, password })
         .then((data) => {
             console.log('✅ Registered:', data);
             AccessLoginContextProvider.setUserLoggedIn({ username });
@@ -23,7 +23,8 @@ export function handleSubmit({ username, password, navigate }) {
             navigate('/');
         })
         .catch((err) => {
-            console.error('❌ Error submitting data:', err.message);
+            alert(err.message);
+            //console.error('❌ Error submitting data:', err.message);
         });
 }
 

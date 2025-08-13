@@ -1,7 +1,14 @@
 import './Bar.css';
 import { useNavigate } from 'react-router-dom';
-import { onClickSignUp, onClickLogin, onClickSignOut } from './BarLogic';
+import {
+    onClickSignUp,
+    onClickLogin,
+    onClickSignOut,
+    onClickLogo,
+    onClickHighscore,
+} from './BarLogic';
 import { UserLogin } from '../context/LoginContext';
+//import logo from '../images/logo2.png';
 
 function Bar() {
     const navigate = useNavigate();
@@ -9,24 +16,47 @@ function Bar() {
 
     return (
         <div className='bar'>
-            <p>logo place</p>
-            {userLoggedIn ? (
-                <>
-                    <button onClick={() => onClickLogin(navigate)}>
-                        highscore
-                    </button>
-                    <button onClick={() => onClickSignOut()}>sign out</button>
-                </>
-            ) : (
-                <>
-                    <button onClick={() => onClickLogin(navigate)}>
-                        login
-                    </button>
-                    <button onClick={() => onClickSignUp(navigate)}>
-                        sign up
-                    </button>
-                </>
-            )}
+            <img
+                src='/images/logo2.png'
+                alt='Logo'
+                className='logo-image'
+                onClick={() => onClickLogo(navigate)}
+            />
+
+            {/*<p>logo place</p>*/}
+            <div>
+                {userLoggedIn ? (
+                    <>
+                        <button
+                            className='button'
+                            onClick={() => onClickHighscore(navigate)}
+                        >
+                            highscore
+                        </button>
+                        <button
+                            className='button'
+                            onClick={() => onClickSignOut(navigate)}
+                        >
+                            sign out
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            className='button'
+                            onClick={() => onClickLogin(navigate)}
+                        >
+                            login
+                        </button>
+                        <button
+                            className='button'
+                            onClick={() => onClickSignUp(navigate)}
+                        >
+                            sign up
+                        </button>
+                    </>
+                )}
+            </div>
         </div>
     );
 }

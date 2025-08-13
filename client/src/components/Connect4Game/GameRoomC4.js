@@ -1,42 +1,80 @@
-import { useEffect, useState } from 'react';
-
+import { useGameUtilsC4 } from './C4Utils';
+import { useGameRoomC4S } from './GameRoomC4S';
+import GameBoardUIC4 from './C4BoardUI';
+import { useEffect } from 'react';
+//import { useLocation } from 'react-router-dom';
+import { useDisconnectOnLeave } from './LeaveC4';
+import './C4Board.css';
+import Bar from '../Bar';
+import BackButton from '../BackButton/BackButton';
 function GameRoomC4({ socket, username }) {
-    const [statusMessage, setStatusMessage] = useState('ממתין לשחקן נוסף...');
-    const [gameStarted, setGameStarted] = useState(false);
+    //const location = useLocation();
+    console.log('[MOUNT] GameRoomC4 mounted');
+    useEffect(() => {
+        return () => {
+            console.log('[UNMOUNT] GameRoomC4 unmounted');
+        };
+    }, []);
+
+    useDisconnectOnLeave(socket, username);
+    const {
+        board,
+        isMyTurn,
+        statusMessage,
+        gameStarted,
+        startGame,
+        updateBoard,
+        endGame,
+        invalidMove,
+    } = useGameUtilsC4(
+        Array(6)
+            .fill(null)
+            .map(() => Array(7).fill(0))
+    );
+
+    const { sendMove } = useGameRoomC4S(socket, username, {
+        startGame,
+        updateBoard,
+        endGame,
+        invalidMove,
+    });
+
+    const handleColumnClick = (colIndex) => {
+        if (!isMyTurn) return;
+        sendMove(colIndex);
+    };
 
     useEffect(() => {
-        if (!socket) return;
-
-        const onMessage = (event) => {
-            try {
-                console.log('... IN onMessage in GameRoomC4 ...');
-                const data = JSON.parse(event.data);
-                if (data.type === 'match') {
-                    setStatusMessage(data.message || 'נמצא שחקן!');
-                    setGameStarted(true);
-                } else {
-                    console.log('Unhandled message:', data);
-                }
-            } catch (err) {
-                console.error('Error parsing WebSocket message:', err);
+        return () => {
+            if (window.location.pathname === '/GameRoomC4') {
+                return;
+            }
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                console.log('[UNMOUNT] sending leave');
+                socket.send(JSON.stringify({ type: 'leave', username }));
             }
         };
-
-        socket.addEventListener('message', onMessage);
-
-        return () => {
-            socket.removeEventListener('message', onMessage);
-        };
-    }, [socket]);
+    }, [socket, username]);
 
     return (
         <div>
-            <h1>שלום, {username}!</h1>
+            <Bar />
+            <BackButton />
+            <h1>hello {username}!</h1>
             <p>{statusMessage}</p>
             {gameStarted && (
-                <div>
-                    <p>הלוח יוצג כאן בהמשך</p>
-                </div>
+                <>
+                    <h2>
+                        {isMyTurn
+                            ? 'your turn'
+                            : "waiting for your opponent's move"}
+                    </h2>
+                    <GameBoardUIC4
+                        board={board}
+                        isMyTurn={isMyTurn}
+                        onColumnClick={handleColumnClick}
+                    />
+                </>
             )}
         </div>
     );

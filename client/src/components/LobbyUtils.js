@@ -1,6 +1,10 @@
-export function onClickConnect4(navigate) {
+export function onClickConnect4(connect4SetImageSrc, navigate, userLoggedIn) {
     console.log('Connect4 clicked');
-    navigate('/Connect4Difficulty');
+    if (userLoggedIn) navigate('/Connect4Difficulty');
+    else {
+        alert('You must log in to play the game :)  ->');
+        connect4SetImageSrc('./images/connect4.png');
+    }
 }
 
 export function onMouseDownConnect4(connect4SetImageSrc) {

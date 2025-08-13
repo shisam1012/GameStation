@@ -2,31 +2,67 @@ import Bar from './Bar';
 import './Lobby.css';
 import { useNavigate } from 'react-router-dom';
 import { /*useEffect,*/ useState } from 'react';
-//import { UserLogin } from '../context/LoginContext';
+import { UserLogin } from '../context/LoginContext';
 import { onClickConnect4, onMouseDownConnect4 } from './LobbyUtils';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+//https://react-bootstrap.netlify.app/docs/components/overlays/#api
 function Lobby() {
-    //const { userLoggedIn } = UserLogin();
     const navigate = useNavigate();
-    /*useEffect(() => {
-        console.log('userLoggedIn updated:', userLoggedIn);
-    }, [userLoggedIn]);*/
+
     const [connect4ImageSrc, connect4SetImageSrc] = useState(
         './images/connect4.png'
     );
-
-    /*<div className='lobby-background'>*/
-
+    const { userLoggedIn } = UserLogin();
+    const [show, setShow] = useState(false);
+    const renderTooltip = (props) => (
+        <Tooltip {...props} className='info-tooltip'>
+            <p>Can you connect four discs before your opponent? </p>
+            <p>Take turns dropping discs into the board — </p>
+            <p>
+                the goal is to create a line of four in a row, column, or
+                diagonal.
+            </p>{' '}
+            <p>
+                <i>*You must be logged in to play.</i>
+            </p>
+        </Tooltip>
+    );
     return (
         <div>
             <Bar />
+            <figure>
+                <div className='image-container'>
+                    <img
+                        className='image-button'
+                        src={connect4ImageSrc}
+                        alt=''
+                        onMouseDown={() =>
+                            onMouseDownConnect4(connect4SetImageSrc)
+                        }
+                        onClick={() =>
+                            onClickConnect4(
+                                connect4SetImageSrc,
+                                navigate,
+                                userLoggedIn
+                            )
+                        }
+                    />
+                    <OverlayTrigger
+                        show={show}
+                        overlay={renderTooltip}
+                        placement='right'
+                    >
+                        <button
+                            className='info-button'
+                            onClick={() => setShow(!show)}
+                        >
+                            i
+                        </button>
+                    </OverlayTrigger>
+                </div>
+            </figure>
 
-            <img
-                className='image-button'
-                src={connect4ImageSrc}
-                alt=''
-                onMouseDown={() => onMouseDownConnect4(connect4SetImageSrc)}
-                onClick={() => onClickConnect4(navigate)}
-            />
             {/*<div>
                 {userLoggedIn
                     ? `Welcome, ${userLoggedIn.username}`

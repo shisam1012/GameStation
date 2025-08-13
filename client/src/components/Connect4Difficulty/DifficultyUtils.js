@@ -1,7 +1,7 @@
 import { playConnect4, onInit } from './DifficultyS';
 import { setSocket } from '../../WebsocketStorage';
 
-export function createOnSubmit(difficulty, navigate, username) {
+export function createOnSubmit(difficulty, navigate, username, location) {
     return function (e) {
         e.preventDefault();
         console.log('submitting difficulty', { difficulty });
@@ -12,7 +12,9 @@ export function createOnSubmit(difficulty, navigate, username) {
             setSocket(socket);
             console.log('READY STATE:', socket.readyState);
             onInit({ username, difficulty });
-            navigate('/GameRoomC4', { state: { username } });
+            navigate('/GameRoomC4', {
+                state: { username, from: location.pathname },
+            });
         };
 
         socket.onerror = (err) => {
