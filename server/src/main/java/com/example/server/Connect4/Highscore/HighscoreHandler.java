@@ -13,8 +13,8 @@ public class HighscoreHandler {
     @GetMapping("/top10")
 public ResponseEntity<List<UserInfo>> getTop10Scores() {
     try {
-        List<UserInfo> topScores = HighscoreC4DB.getTop10Scores();
-        return ResponseEntity.ok(topScores); // גם אם יש פחות מ־10 זה יחזיר כמה שיש
+        List<UserInfo> topScores = HighscoreDAO.getTop10Scores();
+        return ResponseEntity.ok(topScores); 
     } catch (SQLException e) {
         e.printStackTrace();
         System.out.println("sqlexception");
@@ -25,7 +25,7 @@ public ResponseEntity<List<UserInfo>> getTop10Scores() {
 @GetMapping("/userinfo")
 public ResponseEntity<UserInfo> getUserInfo(@RequestParam String username) {
     try {
-        UserInfo userInfo = HighscoreC4DB.getUserInfo(username);
+        UserInfo userInfo = HighscoreDAO.getUserInfo(username);
         if (userInfo != null) {
             return ResponseEntity.ok(userInfo);
         } else {
