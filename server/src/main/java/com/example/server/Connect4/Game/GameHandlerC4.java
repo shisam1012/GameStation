@@ -2,11 +2,9 @@ package com.example.server.connect4.game;
 
 import com.example.server.connect4.sockets.SocketsManager;
 import com.google.gson.Gson;
-
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.springframework.stereotype.Component;
 
 @Component

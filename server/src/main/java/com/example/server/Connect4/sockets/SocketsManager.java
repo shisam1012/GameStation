@@ -3,7 +3,6 @@ package com.example.server.connect4.sockets;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -11,41 +10,51 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 /**
- * Manages WebSocket sessions for Connect4.
+ * Manages WebSocket sessions for the Connect 4 game.
+ * This class is thread-safe and supports concurrent WebSocket connections from multiple players.
  */
-
 @Component
-public class SocketsManager implements DisposableBean{
+public class SocketsManager implements DisposableBean {
+    
+    // Using ConcurrentHashMap for thread safety since WebSocket events are handled in multiple threads.
+    // Map of username -> WebSocketSession. 
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-private final Map<WebSocketSession, String> sessionToUsername = new ConcurrentHashMap<>();
+    
+    // Reverse mapping from WebSocketSession -> username for quick lookup.
+    private final Map<WebSocketSession, String> sessionToUsername = new ConcurrentHashMap<>();
 
-   /*  public void addSession(String username, WebSocketSession session) {
-       sessions.put(username, session);
-   }*/
+   
+    /**
+     * Adds a new session for a player.
+     * If the player already has an active session, the old one is closed first.
+     */
     public void addSession(String username, WebSocketSession session) {
-    WebSocketSession oldSession = sessions.get(username);
-    if (oldSession != null && oldSession.isOpen()) {
-        try {
-            oldSession.close(CloseStatus.NORMAL);
-        } catch (IOException e) {
-            e.printStackTrace();
+        WebSocketSession oldSession = sessions.get(username);
+        if (oldSession != null && oldSession.isOpen()) {
+            try {
+                oldSession.close(CloseStatus.NORMAL);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+        sessions.put(username, session);
+        sessionToUsername.put(session, username);
     }
-    sessions.put(username, session);
-    sessionToUsername.put(session, username);
-}
 
-public String getUsernameBySession(WebSocketSession session) {
-    return sessionToUsername.get(session);
-}
+    //Retrieves the username for a given WebSocketSession
+    public String getUsernameBySession(WebSocketSession session) {
+        return sessionToUsername.get(session);
+    }
 
+    //Retrieves the WebSocketSession for a given username
     public WebSocketSession getSession(String username) {
         return sessions.get(username);
     }
 
-    /*public void removeSession(String username) {
-        sessions.remove(username);
-    }*/
+    /**
+     * Removes a session from both mappings
+     * Called when a player leaves or disconnects
+     */
     public void removeSession(String username) {
         WebSocketSession session = sessions.remove(username);
         if (session != null) {
@@ -53,13 +62,15 @@ public String getUsernameBySession(WebSocketSession session) {
         }
     }
 
+   // Checks if the WebSocket for a given player is still open
     public boolean isSocketOpen(String username) {
-    WebSocketSession session = getSession(username);  
-    return session != null && session.isOpen();
-}
+        WebSocketSession session = getSession(username);  
+        return session != null && session.isOpen();
+    }
 
     /**
      * Sends a message to a specified player - identified by the username.
+     * If the connection is closed or fails, the session is removed.
      */
     public void sendMessageToPlayer(String username, String message) {
         System.out.println("... In sendMessageToPlayer ...");
@@ -70,19 +81,23 @@ public String getUsernameBySession(WebSocketSession session) {
                 try {
                     session.sendMessage(new TextMessage(message));
                 } catch (IOException e) {
-                    System.err.println("Failed to send message to " + username + ": " + e.getMessage());
+                    System.out.println("Failed to send message to " + username + ": " + e.getMessage());
                     removeSession(username);
                 }
-            } else {
-                System.err.println("Session for " + username + " is closed.");
+            } 
+            else {
+                System.out.println("Session for " + username + " is closed, can not send the message.");
             }
-        } else {
-            System.err.println("Session for " + username + " not found.");
+        } 
+        else {
+            System.out.println("Session for " + username + " not found, can not send the message.");
         }
     }
 
     /**
-     * Close all active sessions on shutdown.
+     * Closes all active WebSocket sessions when the bean is destroyed
+     * Triggered automatically on application shutdown
+     * Implements DisposableBean
      */
     @Override
     public void destroy() throws Exception {

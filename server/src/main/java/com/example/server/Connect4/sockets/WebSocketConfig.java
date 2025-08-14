@@ -7,7 +7,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 /**
  * WebSocket configuration class.
- * Registers the WebSocket handler for Connect4.
+ * Registers the WebSocket handler for the Connect 4 game.
  */
 
 @Configuration
