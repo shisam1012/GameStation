@@ -6,45 +6,52 @@ import com.example.server.connect4.sockets.SocketsManager;
 import com.google.gson.Gson;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Listens to the Connect 4 game queue and matches players.
+ * JMS listener for the Connect 4 game queues.
+ * Responsible for matchmaking players based on difficulty level.
+ *
+ * Flow:
+ * 1. Listens to incoming player messages from JMS queues (easy / medium / hard).
+ * 2. Adds players to the appropriate waiting queue.
+ * 3. If there are two players, starts a game and sends "match" messages to both.
  */
 
 @Component
 public class JmsListenerConnect4 {
 
+    // Keeps track of active games (map from username to game controller)
     private final Map<String, Connect4Controller> activeGames = new ConcurrentHashMap<>();
-
+    // Waiting queues for each difficulty level
     private final Queue<String> waitingPlayersEasy = new LinkedList<>();
     private final Queue<String> waitingPlayersMedium = new LinkedList<>();
     private final Queue<String> waitingPlayersHard = new LinkedList<>();
-
+    // Manages WebSocket sessions and sends messages to players
     private final SocketsManager sessionManager;
+    // For converting Java objects to JSON
     private final Gson gson = new Gson();
+    // Handles game logic
     private final GameHandlerC4 gameHandler;
 
-    /*public JmsListenerConnect4(SocketsManagerC4 sessionManager) {
-        this.sessionManager = sessionManager;
-    }*/
     public JmsListenerConnect4(SocketsManager sessionManager, GameHandlerC4 gameHandler) {
-    this.sessionManager = sessionManager;
-    this.gameHandler = gameHandler;
-}
-
+        this.sessionManager = sessionManager;
+        this.gameHandler = gameHandler;
+    }
+    
+    //Listens for players joining the "easy" difficulty queue
     @JmsListener(destination = "connect4easy.queue")
     public void receivePlayerEasy(String username) {
         System.out.println("... In receivePlayerEasy ...");
         System.out.println("received: " + username);
         waitingPlayersEasy.add(username);
-        handleReceivePlayer(waitingPlayersEasy,"easy");
+        handleReceivePlayer(waitingPlayersEasy, "easy");
     }
 
+    //Listens for players joining the "medium" difficulty queue
     @JmsListener(destination = "connect4medium.queue")
     public void receivePlayerMedium(String username) {
         System.out.println("... In receivePlayerMedium ...");
@@ -53,6 +60,7 @@ public class JmsListenerConnect4 {
         handleReceivePlayer(waitingPlayersMedium, "medium");
     }
 
+    //Listens for players joining the "hard" difficulty queue
     @JmsListener(destination = "connect4hard.queue")
     public void receivePlayerHard(String username) {
         System.out.println("... In receivePlayerHard ...");
@@ -62,7 +70,8 @@ public class JmsListenerConnect4 {
     }
 
     private void handleReceivePlayer(Queue<String> waitingPlayers, String difficulty) {
-        if (waitingPlayers.size() == 1) {
+
+        if (waitingPlayers.size() == 1) { //only one player in the queue - notify them to wait
             String playerWaiting = waitingPlayers.peek();
             if (playerWaiting != null && sessionManager.getSession(playerWaiting) != null) {
                 String waitMessage = "{\"type\": \"waiting\", \"message\": \"waiting for another player\"}";
@@ -71,12 +80,12 @@ public class JmsListenerConnect4 {
             }
         }
 
-        if (waitingPlayers.size() >= 2) {
+        if (waitingPlayers.size() >= 2) { //at least two players in the queue - start a game
             String username1 = waitingPlayers.poll();
             String username2 = waitingPlayers.poll();
             System.out.println("Can start a game between " + username1 + " and " + username2);
 
-            // if one of the sessions is not open, return them to the queue
+            // if one of the sessions is not open or invalid, return them to the queue
             if (sessionManager.getSession(username1) == null || sessionManager.getSession(username2) == null) {
                 if (username1 != null)
                     waitingPlayers.add(username1);
@@ -84,33 +93,30 @@ public class JmsListenerConnect4 {
                     waitingPlayers.add(username2);
                 return;
             }
-            if (username1.equals(username2)) {
+            if (username1.equals(username2)) { // prevent a player from playing against themselves
                 String jsonMessage = String.format(
-                "{\"type\": \"duplicateError\", \"message\": \"You can\'t play against yourself...\"}"
-            );
-            sessionManager.sendMessageToPlayer(username1, jsonMessage);
-            return;
+                        "{\"type\": \"duplicateError\", \"message\": \"You can\'t play against yourself...\"}");
+                sessionManager.sendMessageToPlayer(username1, jsonMessage);
+                return;
             }
 
             // Create the game
-            Connect4Controller game = new Connect4Controller(username1, username2,difficulty);
+            Connect4Controller game = new Connect4Controller(username1, username2, difficulty);
             gameHandler.registerGame(username1, username2, game);
 
             // Convert board to JSON
             String boardJson = gson.toJson(game.getBoard());
 
-            // Build messages
+            // Build match messages for both players 
             String jsonMessage1 = String.format(
-                "{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\", \"board\": %s, \"yourTurn\": true}",
-                username2, boardJson
-            );
+                    "{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\", \"board\": %s, \"yourTurn\": true}",
+                    username2, boardJson);
 
             String jsonMessage2 = String.format(
-                "{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\", \"board\": %s, \"yourTurn\": false}",
-                username1, boardJson
-            );
+                    "{\"type\": \"match\", \"message\": \"Found another player! You will play against %s\", \"board\": %s, \"yourTurn\": false}",
+                    username1, boardJson);
 
-            // Send to players
+            // Send match messages
             sessionManager.sendMessageToPlayer(username1, jsonMessage1);
             System.out.println("Sent match message to " + username1);
             sessionManager.sendMessageToPlayer(username2, jsonMessage2);
@@ -118,6 +124,7 @@ public class JmsListenerConnect4 {
         }
     }
 
+    //Removes a player from all waiting queues (useful when they disconnect or leave)
     public void removeFromAllQueues(String username) {
         waitingPlayersEasy.remove(username);
         waitingPlayersMedium.remove(username);
@@ -125,6 +132,7 @@ public class JmsListenerConnect4 {
         System.out.println("Removed " + username + " from all queues");
     }
 
+    //Retrieves the active game for the given player.    
     public Connect4Controller getGameForPlayer(String username) {
         return activeGames.get(username);
     }
