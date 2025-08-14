@@ -1,4 +1,4 @@
-package com.example.server.Connect4.Sockets;
+package com.example.server.connect4.sockets;
 
 import java.io.IOException;
 import java.util.Map;
@@ -15,7 +15,7 @@ import org.springframework.web.socket.WebSocketSession;
  */
 
 @Component
-public class SocketsManagerC4 implements DisposableBean{
+public class SocketsManager implements DisposableBean{
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 private final Map<WebSocketSession, String> sessionToUsername = new ConcurrentHashMap<>();
 

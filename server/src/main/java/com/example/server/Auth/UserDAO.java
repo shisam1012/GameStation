@@ -1,4 +1,4 @@
-package com.example.server.Auth;
+package com.example.server.auth;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

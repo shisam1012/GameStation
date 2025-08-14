@@ -1,6 +1,6 @@
-package com.example.server.Connect4.Game;
+package com.example.server.connect4.game;
 
-import com.example.server.Connect4.Sockets.SocketsManagerC4;
+import com.example.server.connect4.sockets.SocketsManager;
 import com.google.gson.Gson;
 
 import java.sql.SQLException;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 public class GameHandlerC4 {
 
     private final Map<String, Connect4Controller> activeGames = new ConcurrentHashMap<>();
-    private final SocketsManagerC4 sessionManager;
+    private final SocketsManager sessionManager;
     private final Connect4Logic logic = new Connect4Logic();
     private final Gson gson = new Gson();
 
-    public GameHandlerC4(SocketsManagerC4 sessionManager) {
+    public GameHandlerC4(SocketsManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 

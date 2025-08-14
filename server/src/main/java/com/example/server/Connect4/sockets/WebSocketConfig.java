@@ -1,4 +1,4 @@
-package com.example.server.Connect4.Sockets;
+package com.example.server.connect4.sockets;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -12,11 +12,11 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
-public class WebSocketConfigC4 implements WebSocketConfigurer {
+public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final Connect4WebSocketHandler handler;
+    private final WebSocketHandler handler;
 
-    public WebSocketConfigC4(Connect4WebSocketHandler handler) {
+    public WebSocketConfig(WebSocketHandler handler) {
         this.handler = handler;
     }
 

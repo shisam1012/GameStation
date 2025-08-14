@@ -1,4 +1,4 @@
-package com.example.server.Connect4.Game;
+package com.example.server.connect4.game;
 
 public class Connect4Logic {
 	

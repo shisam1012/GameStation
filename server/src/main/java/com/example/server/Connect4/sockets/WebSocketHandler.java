@@ -1,4 +1,4 @@
-package com.example.server.Connect4.Sockets;
+package com.example.server.connect4.sockets;
 
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
@@ -7,8 +7,8 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.server.JmsListenerConnect4;
-import com.example.server.Connect4.Game.GameHandlerC4;
+import com.example.server.connect4.JmsListenerConnect4;
+import com.example.server.connect4.game.GameHandlerC4;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.util.Map;
@@ -17,15 +17,15 @@ import java.util.Map;
  * Handles incoming WebSocket messages and connections.
  */
 @Component
-public class Connect4WebSocketHandler extends TextWebSocketHandler {
+public class WebSocketHandler extends TextWebSocketHandler {
 
-    private final SocketsManagerC4 sessionManager;
+    private final SocketsManager sessionManager;
     private final JmsTemplate jmsTemplate;
     private final ObjectMapper mapper = new ObjectMapper();
     private final JmsListenerConnect4 jmsListenerConnect4;
     private final GameHandlerC4 gameHandler;
 
-    public Connect4WebSocketHandler(SocketsManagerC4 sessionManager, JmsTemplate jmsTemplate, GameHandlerC4 gameHandler,JmsListenerConnect4 jmsListenerConnect4 ) {
+    public WebSocketHandler(SocketsManager sessionManager, JmsTemplate jmsTemplate, GameHandlerC4 gameHandler,JmsListenerConnect4 jmsListenerConnect4 ) {
         this.sessionManager = sessionManager;
         this.jmsTemplate = jmsTemplate;
         this.gameHandler = gameHandler;

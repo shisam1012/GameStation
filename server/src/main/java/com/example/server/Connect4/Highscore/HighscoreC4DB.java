@@ -1,4 +1,4 @@
-package com.example.server.Connect4.Highscore;
+package com.example.server.connect4.highscore;
 
  import java.sql.Connection;
 import java.sql.DriverManager;

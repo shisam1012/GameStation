@@ -1,4 +1,4 @@
-package com.example.server;
+package com.example.server.connect4;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import jakarta.jms.Queue;

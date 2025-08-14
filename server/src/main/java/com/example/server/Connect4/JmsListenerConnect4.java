@@ -1,8 +1,8 @@
-package com.example.server;
+package com.example.server.connect4;
 
-import com.example.server.Connect4.Game.Connect4Controller;
-import com.example.server.Connect4.Game.GameHandlerC4;
-import com.example.server.Connect4.Sockets.SocketsManagerC4;
+import com.example.server.connect4.game.Connect4Controller;
+import com.example.server.connect4.game.GameHandlerC4;
+import com.example.server.connect4.sockets.SocketsManager;
 import com.google.gson.Gson;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -25,14 +25,14 @@ public class JmsListenerConnect4 {
     private final Queue<String> waitingPlayersMedium = new LinkedList<>();
     private final Queue<String> waitingPlayersHard = new LinkedList<>();
 
-    private final SocketsManagerC4 sessionManager;
+    private final SocketsManager sessionManager;
     private final Gson gson = new Gson();
     private final GameHandlerC4 gameHandler;
 
     /*public JmsListenerConnect4(SocketsManagerC4 sessionManager) {
         this.sessionManager = sessionManager;
     }*/
-    public JmsListenerConnect4(SocketsManagerC4 sessionManager, GameHandlerC4 gameHandler) {
+    public JmsListenerConnect4(SocketsManager sessionManager, GameHandlerC4 gameHandler) {
     this.sessionManager = sessionManager;
     this.gameHandler = gameHandler;
 }

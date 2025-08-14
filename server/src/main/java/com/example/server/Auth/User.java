@@ -1,4 +1,4 @@
-package com.example.server.Auth;
+package com.example.server.auth;
 
 /**
  * Represents a user in the system.

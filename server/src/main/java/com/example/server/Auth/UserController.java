@@ -1,4 +1,4 @@
-package com.example.server.Auth;
+package com.example.server.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
