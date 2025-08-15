@@ -1,13 +1,13 @@
 import { useGameUtilsC4 } from './C4Utils';
-import { useGameRoomC4S } from './GameRoomC4S';
+import { useGameRoomC4S } from './GameRoomApi';
 import GameBoardUIC4 from './C4BoardUI';
 import { useEffect } from 'react';
 //import { useLocation } from 'react-router-dom';
 import { useDisconnectOnLeave } from './LeaveC4';
-import './C4Board.css';
-import Bar from '../Bar';
-import BackButton from '../BackButton/BackButton';
-function GameRoomC4({ socket, username }) {
+import '../../../styles/C4Board.css';
+import Bar from '../../../components/Bar/Bar';
+import BackButton from '../../../components/BackButton/BackButton';
+function GameRoom({ socket, username }) {
     //const location = useLocation();
     console.log('[MOUNT] GameRoomC4 mounted');
     useEffect(() => {
@@ -80,4 +80,4 @@ function GameRoomC4({ socket, username }) {
     );
 }
 
-export default GameRoomC4;
+export default GameRoom;

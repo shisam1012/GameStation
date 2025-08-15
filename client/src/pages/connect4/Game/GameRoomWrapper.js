@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import GameRoomC4 from './GameRoomC4';
-import { getSocket } from '../../WebsocketStorage';
+import GameRoom from './GameRoom';
+import { getSocket } from '../../../WebsocketStorage';
 
 function GameRoomC4Wrapper() {
     const location = useLocation();
@@ -18,6 +18,6 @@ function GameRoomC4Wrapper() {
 
     if (!socket || !username) return null;
 
-    return <GameRoomC4 key={username} socket={socket} username={username} />;
+    return <GameRoom key={username} socket={socket} username={username} />;
 }
 export default GameRoomC4Wrapper;

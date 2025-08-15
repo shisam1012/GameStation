@@ -1,4 +1,4 @@
-import './C4Board.css';
+import '../../../styles/C4Board.css';
 
 function GameBoardUIC4({ board, isMyTurn, onColumnClick }) {
     const renderCell = (value, rowIndex, colIndex) => {

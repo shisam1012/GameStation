@@ -1,9 +1,9 @@
 import { createOnSubmit } from './LoginUtils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Bar from '../Bar';
-import '../../CSS/form.css';
-import BackButton from '../BackButton/BackButton';
+import Bar from '../../components/Bar/Bar.js';
+import '../../styles/form.css';
+import BackButton from '../../components/BackButton/BackButton.js';
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

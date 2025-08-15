@@ -1,5 +1,5 @@
-import { playConnect4, onInit } from './DifficultyS';
-import { setSocket } from '../../WebsocketStorage';
+import { playConnect4, onInit } from './DifficultyApi';
+import { setSocket } from '../../../WebsocketStorage';
 
 export function createOnSubmit(difficulty, navigate, username, location) {
     return function (e) {

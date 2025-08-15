@@ -1,8 +1,8 @@
-import Bar from './Bar';
-import './Lobby.css';
+import Bar from '../../components/Bar/Bar';
+import '../../styles/Lobby.css';
 import { useNavigate } from 'react-router-dom';
 import { /*useEffect,*/ useState } from 'react';
-import { UserLogin } from '../context/LoginContext';
+import { UserLogin } from '../../context/LoginContext';
 import { onClickConnect4, onMouseDownConnect4 } from './LobbyUtils';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';

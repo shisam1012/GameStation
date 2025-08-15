@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import Highscore from './HighscoreUI';
-import { getTopScores, getUserInfo } from './HighscoreS';
+import { getTopScores, getUserInfo } from './HighscoreApi';
 import { LoginContext } from '../../context/LoginContext';
 function HighscoreContainer() {
     const [topScores, setTopScores] = useState([]);

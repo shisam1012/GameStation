@@ -1,5 +1,5 @@
-import Bar from '../Bar';
-import BackButton from '../BackButton/BackButton';
+import Bar from '../../components/Bar/Bar';
+import BackButton from '../../components/BackButton/BackButton';
 function Highscore({ topScores = [], userInfo = null }) {
     return (
         <div>

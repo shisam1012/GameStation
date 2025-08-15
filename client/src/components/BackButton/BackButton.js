@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { goBack } from './BackButtonUtils';
-import './BackButton.css';
+import '../../styles/BackButton.css';
 function BackButton() {
     const location = useLocation();
     const navigate = useNavigate();

@@ -1,11 +1,11 @@
 import Select from 'react-select';
 import { useState } from 'react';
-import { createOnSubmit } from './DifficultyUtils';
+import { createOnSubmit } from './DifficultyService';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UserLogin } from '../../context/LoginContext';
-import '../../CSS/form.css';
-import BackButton from '../BackButton/BackButton';
-import Bar from '../Bar';
+import { UserLogin } from '../../../context/LoginContext';
+import '../../../styles/form.css';
+import Bar from '../../../components/Bar/Bar';
+import BackButton from '../../../components/BackButton/BackButton';
 function Connect4Difficulty() {
     const options = [
         { value: 'Easy', label: 'Easy' },

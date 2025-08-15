@@ -1,4 +1,4 @@
-import './Bar.css';
+import '../../styles/Bar.css';
 import { useNavigate } from 'react-router-dom';
 import {
     onClickSignUp,
@@ -7,8 +7,7 @@ import {
     onClickLogo,
     onClickHighscore,
 } from './BarLogic';
-import { UserLogin } from '../context/LoginContext';
-//import logo from '../images/logo2.png';
+import { UserLogin } from '../../context/LoginContext';
 
 function Bar() {
     const navigate = useNavigate();

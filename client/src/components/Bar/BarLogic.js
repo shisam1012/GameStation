@@ -1,5 +1,5 @@
 //import { useNavigate } from 'react-router-dom';
-import { AccessLoginContextProvider } from '../context/LoginContext.js';
+import { AccessLoginContextProvider } from '../../context/LoginContext.js';
 
 export function onClickSignUp(navigate) {
     //console.log('sign up clicked');
