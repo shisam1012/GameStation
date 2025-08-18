@@ -75,7 +75,7 @@ public class SocketsManager implements DisposableBean {
     public void sendMessageToPlayer(String username, String message) {
         System.out.println("... In sendMessageToPlayer ...");
         WebSocketSession session = sessions.get(username);
-        if (session != null) {
+        if (session != null && session.isOpen()) {
             System.out.println("Sending message to user " + username + ", session open: " + session.isOpen());
             if (session.isOpen()) {
                 try {

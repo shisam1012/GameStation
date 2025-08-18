@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 export function useDisconnectOnLeave(socket, username) {
     const location = useLocation();
 
-    // עטוף ב־useCallback כדי למנוע אזהרות ויציבות בזיכרון
     const sendLeave = useCallback(() => {
         if (socket && socket.readyState === WebSocket.OPEN) {
             console.log('>>> Sending leave...');
@@ -12,7 +11,7 @@ export function useDisconnectOnLeave(socket, username) {
         }
     }, [socket, username]);
 
-    // כשסוגרים את הדפדפן / רענון
+    //when closing the browser or reload the page
     useEffect(() => {
         window.addEventListener('beforeunload', sendLeave);
         return () => {
@@ -20,7 +19,7 @@ export function useDisconnectOnLeave(socket, username) {
         };
     }, [sendLeave]);
 
-    // כשעוזבים את הדף בתוך האתר
+    //when leaving the gane page
     useEffect(() => {
         const prevPath = location.pathname;
         return () => {

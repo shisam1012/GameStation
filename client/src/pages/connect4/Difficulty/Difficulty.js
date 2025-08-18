@@ -16,6 +16,9 @@ function Connect4Difficulty() {
     const navigate = useNavigate();
     const location = useLocation();
     const [difficulty, setDifficulty] = useState(options[0]);
+    if (!userLoggedIn) {
+        return <p>Please login to see choose a difficulty.</p>;
+    }
     const onSubmit = createOnSubmit(
         difficulty.value,
         navigate,

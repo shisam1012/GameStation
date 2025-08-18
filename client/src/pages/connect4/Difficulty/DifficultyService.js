@@ -1,7 +1,12 @@
 import { playConnect4, onInit } from './DifficultyApi';
 import { setSocket } from '../../../WebsocketStorage';
+//import { LoginContext } from '../../context/LoginContext';
 
 export function createOnSubmit(difficulty, navigate, username, location) {
+    //const { userLoggedIn } = useContext(LoginContext);
+
+    // const username = userLoggedIn?.username;
+
     return function (e) {
         e.preventDefault();
         console.log('submitting difficulty', { difficulty });

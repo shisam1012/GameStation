@@ -6,8 +6,8 @@ import {
     onClickSignOut,
     onClickLogo,
     onClickHighscore,
-} from './BarLogic';
-import { UserLogin } from '../../context/LoginContext';
+} from './BarLogic.js';
+import { UserLogin } from '../../context/LoginContext.js';
 
 function Bar() {
     const navigate = useNavigate();
@@ -22,7 +22,6 @@ function Bar() {
                 onClick={() => onClickLogo(navigate)}
             />
 
-            {/*<p>logo place</p>*/}
             <div>
                 {userLoggedIn ? (
                     <>
