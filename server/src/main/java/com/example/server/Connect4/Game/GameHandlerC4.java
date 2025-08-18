@@ -102,7 +102,30 @@ public class GameHandlerC4 {
         sendToPlayer(getOpponent(username, game), String.format(
                 "{\"type\": \"boardUpdate\", \"board\": %s, \"yourTurn\": true}", boardJson));
     }
-        
+       
+    public void handleTimeOut(String username) {
+    Connect4Controller game = activeGames.get(username);
+    if (game == null || game.isGameOver()) return;
+
+    String opponent = getOpponent(username, game);
+    game.setGameOver(true);
+
+    // שולחים הודעה ליריב שמנצח
+    String boardJson = gson.toJson(game.getBoard());
+    sendToPlayer(opponent, String.format(
+            "{\"type\": \"gameOver\", \"message\": \"Your opponent ran out of time! You win.\", \"board\": %s}", boardJson));
+
+    // שולחים הודעה לשחקן שהזמן נגמר
+    sendToPlayer(username, String.format(
+            "{\"type\": \"gameOver\", \"message\": \"You ran out of time!\", \"board\": %s}", boardJson));
+
+    // עדכון ניקוד
+    updateScore(game, opponent, username);
+
+    removeGame(username);
+}
+
+
     public void handlePlayerDisconnected(String username) {
         Connect4Controller game = activeGames.get(username);
         if (game == null || game.isGameOver()) return;

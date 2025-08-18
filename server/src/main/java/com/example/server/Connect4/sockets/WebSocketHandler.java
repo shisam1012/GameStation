@@ -112,6 +112,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         System.err.println("Invalid move message received: missing a column");
                     }
                     break;
+                case "timeOut":
+                    if (username != null) {
+                        System.out.println("User timed out: " + username);
+                        gameHandler.handleTimeOut(username);
+                    }
+                    break;
+
+
             }
         }
     }

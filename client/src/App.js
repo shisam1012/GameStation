@@ -5,7 +5,6 @@ import Login from './pages/Login/Login.js';
 import Connect4Difficulty from './pages/connect4/Difficulty/Difficulty.js';
 import GameRoomC4Wrapper from './pages/connect4/Game/GameRoomWrapper';
 import HighscoreContainer from './pages/Highscore/HighscoreUtils.js';
-import GameRoom from './pages/connect4/Game2/GameRoom.js';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 //import { LoginContext } from './context/LoginContext.js';

@@ -7,6 +7,7 @@ import { useDisconnectOnLeave } from './LeaveC4';
 import '../../../styles/C4Board.css';
 import Bar from '../../../components/Bar/Bar';
 import BackButton from '../../../components/BackButton/BackButton';
+import Timer from '../../../components/Timer';
 function GameRoom({ socket, username }) {
     //const location = useLocation();
     console.log('[MOUNT] GameRoomC4 mounted');
@@ -56,6 +57,14 @@ function GameRoom({ socket, username }) {
         };
     }, [socket, username]);
 
+    const handleTimeOut = () => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({ type: 'timeOut', username }));
+        }
+
+        alert("Time's up! You lost your turn.");
+    };
+
     return (
         <div>
             <Bar />
@@ -69,6 +78,11 @@ function GameRoom({ socket, username }) {
                             ? 'your turn'
                             : "waiting for your opponent's move"}
                     </h2>
+                    <Timer
+                        initialTime={30}
+                        isMyTurn={isMyTurn}
+                        onTimeOut={handleTimeOut}
+                    />
                     <GameBoardUIC4
                         board={board}
                         isMyTurn={isMyTurn}
