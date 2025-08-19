@@ -62,7 +62,7 @@ function GameRoom({ socket, username }) {
             socket.send(JSON.stringify({ type: 'timeOut', username }));
         }
 
-        alert("Time's up! You lost your turn.");
+        //alert("Time's up! You lost your turn.");
     };
 
     return (

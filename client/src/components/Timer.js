@@ -15,7 +15,7 @@ function Timer({ initialTime = 30, isMyTurn, onTimeOut }) {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(interval);
-                    onTimeOut(); // הקריאה כשנגמר הזמן
+                    onTimeOut();
                     return 0;
                 }
                 return prev - 1;
