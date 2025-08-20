@@ -5,11 +5,7 @@ export function validateForm({ username, password }) {
     const errors = {};
 
     if (!username) errors.username = 'Username is required';
-    //if (!email) errors.email = 'Email is required';
-    //else if (!validateEmail(email)) errors.email = 'Invalid email address';
-
     if (!password) errors.password = 'Password is required';
-    // else if (password.length < 6) errors.password = 'Password too short';
 
     return errors;
 }
@@ -19,7 +15,7 @@ export function handleSubmit({ username, password, navigate }) {
         .then((data) => {
             console.log('✅ Registered:', data);
             AccessLoginContextProvider.setUserLoggedIn({ username });
-            console.log('.....');
+            //console.log('.....');
             navigate('/');
         })
         .catch((err) => {

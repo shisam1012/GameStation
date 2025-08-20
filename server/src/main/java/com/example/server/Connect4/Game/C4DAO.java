@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 //import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class C4DBController {
+public class C4DAO {
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

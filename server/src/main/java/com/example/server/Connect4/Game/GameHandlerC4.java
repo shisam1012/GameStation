@@ -10,22 +10,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameHandlerC4 {
 
-    private final Map<String, Connect4Controller> activeGames = new ConcurrentHashMap<>();
+    private final Map<String, C4Controller> activeGames = new ConcurrentHashMap<>();
     private final SocketsManager sessionManager;
-    private final Connect4Logic logic = new Connect4Logic();
+    private final C4Logic logic = new C4Logic();
     private final Gson gson = new Gson();
 
     public GameHandlerC4(SocketsManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
-    public void registerGame(String player1, String player2, Connect4Controller game) {
+    public void registerGame(String player1, String player2, C4Controller game) {
         activeGames.put(player1, game);
         activeGames.put(player2, game);
     }
 
     public void handleMove(String username, int column) {
-        Connect4Controller game = activeGames.get(username);
+        C4Controller game = activeGames.get(username);
         if (game == null || game.isGameOver())
             return;
 
@@ -74,7 +74,7 @@ public class GameHandlerC4 {
     }
        
     public void handleTimeOut(String username) {
-        Connect4Controller game = activeGames.get(username);
+        C4Controller game = activeGames.get(username);
         if (game == null || game.isGameOver()) return;
 
         String opponent = getOpponent(username, game);
@@ -95,7 +95,7 @@ public class GameHandlerC4 {
 
 
     public void handlePlayerDisconnected(String username) {
-        Connect4Controller game = activeGames.get(username);
+        C4Controller game = activeGames.get(username);
         if (game == null || game.isGameOver()) return;
 
         String opponent = getOpponent(username, game);
@@ -108,20 +108,20 @@ public class GameHandlerC4 {
         removeGame(username);
     }
 
-    private void updateScore(Connect4Controller game, String username, String opponent) {
+    private void updateScore(C4Controller game, String username, String opponent) {
         try {
             switch (game.getDifficulty()) {
                 case "easy":
-                    C4DBController.updateInfo(username, 1, 1);
+                    C4DAO.updateInfo(username, 1, 1);
                     break;
                 case "medium":
-                    C4DBController.updateInfo(username, 3, 1);
+                    C4DAO.updateInfo(username, 3, 1);
                     break;
                 case "hard":
-                    C4DBController.updateInfo(username, 5, 1);
+                    C4DAO.updateInfo(username, 5, 1);
                     break;
             }
-            C4DBController.updateInfo(opponent, 0, 0);
+            C4DAO.updateInfo(opponent, 0, 0);
 
         } catch (SQLException e) {
             sendToPlayer(username, String
@@ -141,7 +141,7 @@ public class GameHandlerC4 {
     }
 
 
-    private String getOpponent(String username, Connect4Controller game) {
+    private String getOpponent(String username, C4Controller game) {
         if (username.equals(game.getCurrentPlayerName())) {
             return game.getCurrentPlayer() == 1 ? game.getPlayer2() : game.getPlayer1();
         } else {
@@ -151,7 +151,7 @@ public class GameHandlerC4 {
 
 
     public void removeGame(String username) {
-        Connect4Controller game = activeGames.remove(username);
+        C4Controller game = activeGames.remove(username);
         if (game != null) {
             activeGames.remove(game.getPlayer1());
             activeGames.remove(game.getPlayer2());

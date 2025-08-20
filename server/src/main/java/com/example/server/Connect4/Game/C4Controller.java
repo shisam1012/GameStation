@@ -1,6 +1,6 @@
 package com.example.server.connect4.game;
 
-public class Connect4Controller {
+public class C4Controller {
     private final int ROWS = 6;
     private final int COLS = 7;
     private int[][] board; //0 = empty, 1 = player1, 2 =player2
@@ -11,7 +11,7 @@ public class Connect4Controller {
     private String difficulty; //the score at the end of the game depands on the diffculty
 
     
-    public Connect4Controller(String player1, String player2, String difficulty) {
+    public C4Controller(String player1, String player2, String difficulty) {
         this.player1 = player1;
         this.player2 = player2;
         this.board = new int[ROWS][COLS];

@@ -1,6 +1,6 @@
 package com.example.server.connect4.game;
 
-public class Connect4Logic {
+public class C4Logic {
 	
 	private final int NUM_ROWS = 6;
 	private final int NUM_COLS = 7;

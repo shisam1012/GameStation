@@ -1,6 +1,6 @@
 package com.example.server.connect4;
 
-import com.example.server.connect4.game.Connect4Controller;
+import com.example.server.connect4.game.C4Controller;
 import com.example.server.connect4.game.GameHandlerC4;
 import com.example.server.connect4.sockets.SocketsManager;
 import com.google.gson.Gson;
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JmsListenerConnect4 {
 
     // Keeps track of active games (map from username to game controller)
-    private final Map<String, Connect4Controller> activeGames = new ConcurrentHashMap<>();
+    private final Map<String, C4Controller> activeGames = new ConcurrentHashMap<>();
     // Waiting queues for each difficulty level
     private final Queue<String> waitingPlayersEasy = new LinkedList<>();
     private final Queue<String> waitingPlayersMedium = new LinkedList<>();
@@ -101,7 +101,7 @@ public class JmsListenerConnect4 {
             }
 
             // Create the game
-            Connect4Controller game = new Connect4Controller(username1, username2, difficulty);
+            C4Controller game = new C4Controller(username1, username2, difficulty);
             gameHandler.registerGame(username1, username2, game);
 
             // Convert board to JSON
@@ -133,7 +133,7 @@ public class JmsListenerConnect4 {
     }
 
     //Retrieves the active game for the given player.    
-    public Connect4Controller getGameForPlayer(String username) {
+    public C4Controller getGameForPlayer(String username) {
         return activeGames.get(username);
     }
 }
