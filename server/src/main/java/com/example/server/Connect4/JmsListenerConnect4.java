@@ -24,8 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class JmsListenerConnect4 {
 
-    // Keeps track of active games (map from username to game controller)
-    private final Map<String, C4Controller> activeGames = new ConcurrentHashMap<>();
     // Waiting queues for each difficulty level
     private final Queue<String> waitingPlayersEasy = new LinkedList<>();
     private final Queue<String> waitingPlayersMedium = new LinkedList<>();
@@ -132,8 +130,4 @@ public class JmsListenerConnect4 {
         System.out.println("Removed " + username + " from all queues");
     }
 
-    //Retrieves the active game for the given player.    
-    public C4Controller getGameForPlayer(String username) {
-        return activeGames.get(username);
-    }
 }

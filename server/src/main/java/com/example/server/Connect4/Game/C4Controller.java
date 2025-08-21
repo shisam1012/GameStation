@@ -1,16 +1,27 @@
 package com.example.server.connect4.game;
 
+/**
+ * Controller class for a Connect 4 game.
+ * Holds the game state: players, board, current turn, difficulty, and status.
+ */
 public class C4Controller {
     private final int ROWS = 6;
     private final int COLS = 7;
-    private int[][] board; //0 = empty, 1 = player1, 2 =player2
+    private int[][] board; // 0 = empty, 1 = player1's disc, 2 = player2's disc
     private String player1;
     private String player2;
     private int currentPlayer; // 1 or 2
     private boolean isGameOver;
-    private String difficulty; //the score at the end of the game depands on the diffculty
+    private String difficulty; // difficulty level, affects scoring
 
     
+    /**
+     * Constructor: initializes a new game between two players.
+     *
+     * @param player1   username of player 1
+     * @param player2   username of player 2
+     * @param difficulty chosen difficulty level
+     */
     public C4Controller(String player1, String player2, String difficulty) {
         this.player1 = player1;
         this.player2 = player2;

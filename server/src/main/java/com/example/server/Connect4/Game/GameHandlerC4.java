@@ -7,9 +7,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class handles the clients' messages and responds to them.
+ * It manages active games, processes moves, handles disconnections and timeouts and updates scores accordingly.
+ */
+
 @Component
 public class GameHandlerC4 {
-
+    // Keeps track of active games (map from username to game controller)
     private final Map<String, C4Controller> activeGames = new ConcurrentHashMap<>();
     private final SocketsManager sessionManager;
     private final C4Logic logic = new C4Logic();
@@ -19,18 +24,20 @@ public class GameHandlerC4 {
         this.sessionManager = sessionManager;
     }
 
+    //Register a new game for both players
     public void registerGame(String player1, String player2, C4Controller game) {
         activeGames.put(player1, game);
         activeGames.put(player2, game);
     }
 
+    //Handles a move request from a player
     public void handleMove(String username, int column) {
         C4Controller game = activeGames.get(username);
-        if (game == null || game.isGameOver())
+        if (game == null || game.isGameOver()) //shouldnt happen...
             return;
 
         String currentPlayerName = game.getCurrentPlayerName();
-        if (!currentPlayerName.equals(username)) {
+        if (!currentPlayerName.equals(username)) { //validate that it is actually the player's turn
             sendToPlayer(username, "{\"type\": \"invalidMove\", \"message\": \"Not your turn\"}");
             return;
         }
@@ -38,9 +45,10 @@ public class GameHandlerC4 {
         int playerNumber = game.getCurrentPlayer();
         int[][] board = game.getBoard();
         String opponent = getOpponent(username, game);
-        boolean success = logic.updateBoard(board, column, playerNumber);
+
+        boolean success = logic.updateBoard(board, column, playerNumber); //try to place a disc in the given column
         String boardJson = gson.toJson(board);
-        if (!success) {
+        if (!success) { //the given column is a,ready full
             sendToPlayer(username, "{\"type\": \"invalidMove\", \"message\": \"Invalid move\"}");
             return;
         }
@@ -55,7 +63,7 @@ public class GameHandlerC4 {
             removeGame(username);
             return;
         }
-        if (logic.winningBoard(board, playerNumber)) { //the last move finished the game
+        if (logic.winningBoard(board, playerNumber)) { //the last move finished the game with a win
             game.setGameOver(true);
             updateScore(game, username, opponent);
             sendToPlayer(username, String.format(
@@ -65,14 +73,25 @@ public class GameHandlerC4 {
             removeGame(username);
             return;
         }
+        if (logic.fullBoard(board)) { //there are no more possible moves and no one won the game already
+            game.setGameOver(true);
+            sendToPlayer(username, String.format(
+                    "{\"type\": \"gameOver\", \"message\": \"It's a tie! This game will not count\"}"));
+            sendToPlayer(opponent, String.format(
+                    "{\"type\": \"gameOver\", \"message\": \"It's a tie! This game will not count\"}"));
+            removeGame(username);
+            return;
+        }
+        //otherwise - switch the turns and update the board for both players
         game.switchTurn();
         sendToPlayer(username, String.format(
                 "{\"type\": \"boardUpdate\", \"board\": %s, \"yourTurn\": false}", boardJson));
 
-        sendToPlayer(getOpponent(username, game), String.format(
+        sendToPlayer(opponent, String.format(
                 "{\"type\": \"boardUpdate\", \"board\": %s, \"yourTurn\": true}", boardJson));
     }
-       
+    
+    // Called when a player's timer runs out
     public void handleTimeOut(String username) {
         C4Controller game = activeGames.get(username);
         if (game == null || game.isGameOver()) return;
@@ -93,21 +112,25 @@ public class GameHandlerC4 {
         removeGame(username);
     }
 
-
+    // Called when a player disconnects during a game
     public void handlePlayerDisconnected(String username) {
         C4Controller game = activeGames.get(username);
-        if (game == null || game.isGameOver()) return;
+        if (game == null || game.isGameOver())
+            return;
 
         String opponent = getOpponent(username, game);
         game.setGameOver(true);
-        updateScore(game, opponent, username); 
+        updateScore(game, opponent, username);
 
         String boardJson = gson.toJson(game.getBoard());
-        sendToPlayer(opponent, String.format("{\"type\": \"gameOver\", \"message\": \"You win! Your opponent disconnected.\", \"board\": %s}", boardJson));
-        
+        sendToPlayer(opponent, String.format(
+                "{\"type\": \"gameOver\", \"message\": \"You won! Your opponent disconnected.\", \"board\": %s}",
+                boardJson));
+
         removeGame(username);
     }
 
+    // Update player scores in the database based on the difficulty
     private void updateScore(C4Controller game, String username, String opponent) {
         try {
             switch (game.getDifficulty()) {
@@ -132,6 +155,7 @@ public class GameHandlerC4 {
 
     }
    
+    // Send a message to a specific player if their session is still open
     private void sendToPlayer(String username, String message) {
         if (sessionManager.isSocketOpen(username)) {
             sessionManager.sendMessageToPlayer(username, message);
@@ -140,16 +164,13 @@ public class GameHandlerC4 {
         }
     }
 
-
+    //Returns the name of the opponent 
     private String getOpponent(String username, C4Controller game) {
-        if (username.equals(game.getCurrentPlayerName())) {
-            return game.getCurrentPlayer() == 1 ? game.getPlayer2() : game.getPlayer1();
-        } else {
-            return username.equals(game.getPlayer1()) ? game.getPlayer2() : game.getPlayer1();
-        }
+        return username.equals(game.getPlayer1()) ? game.getPlayer2() : game.getPlayer1();    
     }
 
 
+    //Remove the game of the given user from the hashmap - also remove the player's opponent
     public void removeGame(String username) {
         C4Controller game = activeGames.remove(username);
         if (game != null) {
@@ -158,6 +179,7 @@ public class GameHandlerC4 {
         }
     }
 
+    //Check if a player is currently in a game
     public boolean isInGame(String username) {
         return activeGames.containsKey(username);
     }
