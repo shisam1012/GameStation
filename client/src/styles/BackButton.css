@@ -1,6 +1,6 @@
 .back-button-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     padding: 1vmax;
 }
 

@@ -1,17 +1,21 @@
 import { useEffect } from 'react';
 import { popMessage } from './C4Utils';
-export function useGameRoomC4S(socket, username, callbacks) {
+
+export function useGameRoomC4Api(socket, username, callbacks) {
+    // Destructure callback functions for handling game state updates
     const { startGame, updateBoard, endGame, invalidMove } = callbacks;
 
     useEffect(() => {
-        if (!socket) return;
+        if (!socket) return; //if the socket is not available, do nothing
 
+        //Define handler for incoming WebSocket messages
         const onMessage = (event) => {
             try {
-                const data = JSON.parse(event.data);
+                const data = JSON.parse(event.data); //parse the JSON data from the server
 
+                //Handle different message types sent by the server
                 switch (data.type) {
-                    case 'match':
+                    case 'match': //game start - initialize the board
                         startGame(
                             data.board ||
                                 Array(6)
@@ -21,21 +25,27 @@ export function useGameRoomC4S(socket, username, callbacks) {
                             data.message
                         );
                         break;
-                    case 'boardUpdate':
+
+                    case 'boardUpdate': //update the board and turn status after a move
                         updateBoard(data.board, data.yourTurn);
                         break;
-                    case 'gameOver':
+
+                    case 'gameOver': //notify the user the game ended
                         endGame(data.message);
                         break;
-                    case 'invalidMove':
+
+                    case 'invalidMove': //notify the user of an invalid move attempt
                         invalidMove(data.message);
                         break;
+
                     case 'duplicateError':
                         popMessage(data.message);
                         break;
-                    case 'exception':
+
+                    case 'exception': //general server-side exception message
                         popMessage(data.message);
                         break;
+
                     default:
                         console.log('Unhandled message:', data);
                 }
@@ -44,10 +54,11 @@ export function useGameRoomC4S(socket, username, callbacks) {
             }
         };
 
-        socket.addEventListener('message', onMessage);
+        socket.addEventListener('message', onMessage); //onMessage is in DifficultyApi where the socket is initialize
         return () => socket.removeEventListener('message', onMessage);
     }, [socket, startGame, updateBoard, endGame, invalidMove]);
 
+    // Function to send a move to the server
     const sendMove = (colIndex) => {
         if (!socket) return;
         socket.send(

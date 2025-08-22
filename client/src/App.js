@@ -3,8 +3,8 @@ import Lobby from './pages/Lobby/Lobby.js';
 import SignUp from './pages/Signup/SignUp.js';
 import Login from './pages/Login/Login.js';
 import Connect4Difficulty from './pages/connect4/Difficulty/Difficulty.js';
-import GameRoomC4Wrapper from './pages/connect4/Game/GameRoomWrapper';
 import HighscoreContainer from './pages/Highscore/HighscoreUtils.js';
+import GameRoom from './pages/connect4/Game/GameRoom.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
                         path='/Connect4Difficulty'
                         element={<Connect4Difficulty />}
                     />
-                    <Route path='/GameRoomC4' element={<GameRoomC4Wrapper />} />
+                    <Route path='/GameRoom' element={<GameRoom />} />
                     <Route path='/Highscore' element={<HighscoreContainer />} />
                 </Routes>
             </Router>

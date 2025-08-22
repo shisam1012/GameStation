@@ -17,8 +17,9 @@ export function createOnSubmit(difficulty, navigate, username, location) {
             setSocket(socket);
             console.log('READY STATE:', socket.readyState);
             onInit({ username, difficulty });
-            navigate('/GameRoomC4', {
-                state: { username, from: location.pathname },
+
+            navigate('/GameRoom', {
+                state: { from: location.pathname },
             });
         };
 
