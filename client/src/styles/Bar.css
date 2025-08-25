@@ -1,0 +1,37 @@
+.bar {
+    background-color: rgba(197, 222, 243, 0.3);
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo-image {
+    align-self: center;
+    width: calc(12vmax + 2rem);
+    height: auto;
+    cursor: pointer;
+}
+
+.logo-image:hover {
+    transform: scale(1.05);
+}
+
+.button {
+    background-color: coral;
+    font-size: calc(1vmax + 0.35rem);
+    color: rgb(238, 232, 204);
+    border-radius: 2vmax;
+    border-color: coral;
+    /* background-color: #16851d;
+    border-color: #040e02; */
+    text-align: center;
+    /*border: 0.2;*/
+    /* width: 8vmax; */
+    width: calc(6vmax + 2rem);
+    height: calc(3vmax + 1rem);
+    margin: 1vmax;
+    cursor: pointer;
+}
+
+.button:hover {
+    transform: scale(1.1);
+}

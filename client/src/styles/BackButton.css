@@ -1,0 +1,19 @@
+.back-button-container {
+    display: flex;
+    justify-content: flex-start;
+    padding: 1vmax;
+}
+
+.back-button {
+    /*background-color: coral;*/
+    font-size: 2rem;
+    /* color: rgb(238, 232, 204, 1); */
+    background-color: rgba(197, 222, 243, 0.5);
+    border-radius: 2vmax;
+    border: none;
+    padding: 0.5vmax 1vmax;
+    cursor: pointer;
+}
+.back-button:hover {
+    transform: scale(1.05);
+}
