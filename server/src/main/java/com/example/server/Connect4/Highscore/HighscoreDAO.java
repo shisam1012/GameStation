@@ -46,11 +46,11 @@ public class HighscoreDAO {
 
     /**
      * Retrieves information for a specific user by username.
-     * Returns a UserInfo object if found, or null if the user does not exist.
+     * Returns a UserInfo object if found, or null if the user does not exist (shouldn't happen)
      * Uses a connection from DBUtils and ensures it is released after use.
      *
      * @param username the username of the player
-     * @return UserInfo object for the player, or null if not found
+     * @return UserInfo object for the player
      * @throws SQLException if a database access error occurs
      */
     public static UserInfo getUserInfo(String username) throws SQLException {

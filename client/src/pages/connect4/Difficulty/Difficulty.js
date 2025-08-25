@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { createOnSubmit } from './DifficultyService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserLogin } from '../../../context/LoginContext';
-import '../../../styles/form.css';
+import '../../../styles/Form.css';
 import Bar from '../../../components/Bar/Bar';
 import BackButton from '../../../components/BackButton/BackButton';
+
 function Connect4Difficulty() {
     const options = [
         { value: 'Easy', label: 'Easy' },
@@ -16,6 +17,7 @@ function Connect4Difficulty() {
     const navigate = useNavigate();
     const location = useLocation();
     const [difficulty, setDifficulty] = useState(options[0]);
+
     if (!userLoggedIn) {
         return <p>Please login to see choose a difficulty.</p>;
     }
@@ -25,6 +27,7 @@ function Connect4Difficulty() {
         userLoggedIn.username,
         location
     );
+
     const handleChange = (selectedOption) => {
         setDifficulty(selectedOption);
     };

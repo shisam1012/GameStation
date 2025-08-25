@@ -9,7 +9,7 @@ import org.apache.activemq.command.ActiveMQQueue;
  * Defines beans for the different difficulty-level queues.
  */
 @Configuration
-public class JmsUtils {
+public class JmsConfig {
 
     @Bean
     public Queue easyQueue() {

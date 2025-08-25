@@ -12,10 +12,10 @@ export function createOnSubmit(difficulty, navigate, username, location) {
         console.log('submitting difficulty', { difficulty });
 
         const socket = playConnect4({ username, difficulty });
-        console.log('READY STATE:', socket.readyState);
+        //console.log('READY STATE:', socket.readyState);
         socket.onopen = () => {
             setSocket(socket);
-            console.log('READY STATE:', socket.readyState);
+            //console.log('READY STATE:', socket.readyState);
             onInit({ username, difficulty });
 
             navigate('/GameRoom', {

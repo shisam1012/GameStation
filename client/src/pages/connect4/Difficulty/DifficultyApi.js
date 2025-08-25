@@ -5,7 +5,7 @@ export function playConnect4({ username, difficulty }) {
 
     connect4Socket.onopen = () => {
         console.log('... IN onopen in DifficultyS ...');
-        console.log('WebSocket connected ✅');
+        //console.log('WebSocket connected ✅');
         connect4Socket.send(
             JSON.stringify({ type: 'init', username, difficulty })
         );
@@ -33,7 +33,6 @@ export function playConnect4({ username, difficulty }) {
 
 export function onInit({ username, difficulty }) {
     console.log('... IN onInit in DifficultyS ...');
-    //console.log('WebSocket connected ✅');
     connect4Socket.send(JSON.stringify({ type: 'init', username, difficulty }));
     console.log('Sent init message');
 }

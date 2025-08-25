@@ -2,7 +2,7 @@ import { createOnSubmit } from './LoginUtils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Bar from '../../components/Bar/Bar.js';
-import '../../styles/form.css';
+import '../../styles/Form.css';
 import BackButton from '../../components/BackButton/BackButton.js';
 
 function Login() {

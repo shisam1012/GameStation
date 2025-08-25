@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 @Component
-public class JmsListenerConnect4 {
+public class JmsListenerC4 {
 
     // Waiting queues for each difficulty level
     private final Queue<String> waitingPlayersEasy = new LinkedList<>();
@@ -35,7 +35,7 @@ public class JmsListenerConnect4 {
     // Handles game logic
     private final GameHandlerC4 gameHandler;
 
-    public JmsListenerConnect4(SocketsManager sessionManager, GameHandlerC4 gameHandler) {
+    public JmsListenerC4(SocketsManager sessionManager, GameHandlerC4 gameHandler) {
         this.sessionManager = sessionManager;
         this.gameHandler = gameHandler;
     }

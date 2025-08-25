@@ -7,7 +7,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.server.connect4.JmsListenerConnect4;
+import com.example.server.connect4.JmsListenerC4;
 import com.example.server.connect4.game.GameHandlerC4;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     /// JSON serializer/deserializer for parsing incoming messages and creating responses 
     private final ObjectMapper mapper = new ObjectMapper();
     //Listens to JMS messages for game-related events (opponent found, game updates)
-    private final JmsListenerConnect4 jmsListenerConnect4;
+    private final JmsListenerC4 jmsListenerConnect4;
     //Core game logic handler for processing moves and managing game state.
     private final GameHandlerC4 gameHandler;
 
@@ -41,7 +41,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
      * @param gameHandler core game logic for Connect 4
      * @param jmsListenerConnect4 listener for incoming JMS events
      */
-    public WebSocketHandler(SocketsManager sessionManager, JmsTemplate jmsTemplate, GameHandlerC4 gameHandler,JmsListenerConnect4 jmsListenerConnect4 ) {
+    public WebSocketHandler(SocketsManager sessionManager, JmsTemplate jmsTemplate, GameHandlerC4 gameHandler,JmsListenerC4 jmsListenerConnect4 ) {
         this.sessionManager = sessionManager; //spring will inject this
         this.jmsTemplate = jmsTemplate;
         this.gameHandler = gameHandler;//spring will inject this
