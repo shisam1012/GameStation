@@ -46,6 +46,10 @@ export function useGameRoomC4Api(socket, username, callbacks) {
                         popMessage(data.message);
                         break;
 
+                    case 'disconnectSocket':
+                        endGame(data.message);
+                        break;
+
                     default:
                         console.log('Unhandled message:', data);
                 }

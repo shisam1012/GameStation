@@ -7,9 +7,7 @@ import com.google.gson.Gson;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * JMS listener for the Connect 4 game queues.

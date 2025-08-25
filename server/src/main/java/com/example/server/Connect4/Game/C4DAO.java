@@ -1,10 +1,8 @@
 package com.example.server.connect4.game;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import com.example.server.DBUtils;
 
 /**
@@ -25,6 +23,7 @@ public class C4DAO {
      * @param win      1 if user won, 0 otherwise
      */
     public static void updateInfo(String username, int score, int win) throws SQLException {
+        //this is the only place where there is an update to a row of the user_info table
         Connection conn = DBUtils.getConnection();
         try (//Connection conn = getConnection();
                 PreparedStatement stmt = conn.prepareStatement(
