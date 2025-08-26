@@ -1,10 +1,10 @@
-import { createOnSubmit } from './SignupUtils';
+import { createOnSubmit } from './SignupUtils.js';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Bar from '../../components/Bar/Bar.js';
 import '../../styles/Form.css';
 import BackButton from '../../components/BackButton/BackButton.js';
-function SignUp() {
+function Signup() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatedPassword, setRepeatedPassword] = useState('');
@@ -85,4 +85,4 @@ function SignUp() {
     );
 }
 
-export default SignUp;
+export default Signup;

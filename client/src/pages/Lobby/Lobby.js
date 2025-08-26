@@ -7,6 +7,7 @@ import { onClickConnect4, onMouseDownConnect4 } from './LobbyUtils';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 //https://react-bootstrap.netlify.app/docs/components/overlays/#api
+
 function Lobby() {
     const navigate = useNavigate();
 
@@ -15,6 +16,8 @@ function Lobby() {
     );
     const { userLoggedIn } = UserLogin();
     const [show, setShow] = useState(false);
+
+    // The connect 4 info button text
     const renderTooltip = (props) => (
         <Tooltip {...props} className='info-tooltip'>
             <p>Can you connect four discs before your opponent? </p>

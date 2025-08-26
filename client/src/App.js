@@ -1,6 +1,6 @@
 import './App.css';
 import Lobby from './pages/Lobby/Lobby.js';
-import SignUp from './pages/Signup/SignUp.js';
+import Signup from './pages/Signup/Signup.js';
 import Login from './pages/Login/Login.js';
 import Connect4Difficulty from './pages/connect4/Difficulty/Difficulty.js';
 import HighscoreContainer from './pages/Highscore/HighscoreUtils.js';
@@ -13,7 +13,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path='/' element={<Lobby />} />
-                    <Route path='/SignUp' element={<SignUp />} />
+                    <Route path='/SignUp' element={<Signup />} />
                     <Route path='/Login' element={<Login />} />
                     <Route
                         path='/Connect4Difficulty'

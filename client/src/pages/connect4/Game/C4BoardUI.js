@@ -13,7 +13,7 @@ function GameBoardUIC4({ board, isMyTurn, onColumnClick }) {
         if (value === 1) colorClass = 'cell-red';
         if (value === 2) colorClass = 'cell-yellow';
 
-        // Only the top row is clickable, and only if it's the player's turn
+        //only the top row is clickable, and only if it's the player's turn
         const isClickable = rowIndex === 0 && isMyTurn;
 
         return (

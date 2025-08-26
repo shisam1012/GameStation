@@ -1,5 +1,8 @@
 let connect4Socket = null;
 
+//Create a new web socket connection with the server
+//Contains all the functions to use the socket
+
 export function playConnect4({ username, difficulty }) {
     connect4Socket = new WebSocket(`ws://localhost:8080/connect4-socket`); //${data.toString()}`
 

@@ -1,5 +1,6 @@
-//import { useNavigate } from 'react-router-dom';
 import { AccessLoginContextProvider } from '../../context/LoginContext.js';
+
+//Functions for handeling click events on the bar's buttons
 
 export function onClickSignUp(navigate) {
     //console.log('sign up clicked');

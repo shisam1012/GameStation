@@ -8,6 +8,7 @@ import Bar from '../../../components/Bar/Bar';
 import BackButton from '../../../components/BackButton/BackButton';
 
 function Connect4Difficulty() {
+    //there are 3 options for difficulties
     const options = [
         { value: 'Easy', label: 'Easy' },
         { value: 'Medium', label: 'Medium' },
@@ -18,10 +19,13 @@ function Connect4Difficulty() {
     const location = useLocation();
     const [difficulty, setDifficulty] = useState(options[0]);
 
+    //if the user is not logged in - can not choose a difficulty
     if (!userLoggedIn) {
         return <p>Please login to see choose a difficulty.</p>;
     }
+
     const onSubmit = createOnSubmit(
+        //function from DifficultyService.js
         difficulty.value,
         navigate,
         userLoggedIn.username,
@@ -32,6 +36,7 @@ function Connect4Difficulty() {
         setDifficulty(selectedOption);
     };
 
+    //returns the difficulty selection page with all the components and info needed
     return (
         <div>
             <Bar />
