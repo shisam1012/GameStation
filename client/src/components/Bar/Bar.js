@@ -9,6 +9,10 @@ import {
 } from './BarLogic.js';
 import { UserLogin } from '../../context/LoginContext.js';
 
+/**
+ *
+ * @returns the Bar component - contains two buttons, depending on the UserLogin context
+ */
 function Bar() {
     const navigate = useNavigate();
     const { userLoggedIn } = UserLogin();

@@ -1,10 +1,16 @@
-import { createOnSubmit } from './LoginUtils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Bar from '../../components/Bar/Bar.js';
-import '../../styles/Form.css';
-import BackButton from '../../components/BackButton/BackButton.js';
 
+import BackButton from '../../components/BackButton/BackButton.js';
+import Bar from '../../components/Bar/Bar.js';
+import { createOnSubmit } from './LoginUtils';
+
+import '../../styles/Form.css';
+
+/**
+ *
+ * @returns the login page - includes the bar component, back button, form with username and password fields and a submit button
+ */
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

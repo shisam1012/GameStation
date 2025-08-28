@@ -1,5 +1,6 @@
 import { submitSignupData } from './SignupApi.js';
 import { AccessLoginContextProvider } from '../../context/LoginContext.js';
+
 export function validateForm({ username, password, email, repeatedPassword }) {
     const errors = {};
 
@@ -15,6 +16,7 @@ export function validateForm({ username, password, email, repeatedPassword }) {
     return errors;
 }
 
+//Called by createOnSubmit if there are no errors (missing data, mismatching passwords)
 export function handleSubmit({ username, password, email, navigate }) {
     submitSignupData({ username, password, email })
         .then((data) => {
@@ -29,6 +31,7 @@ export function handleSubmit({ username, password, email, navigate }) {
         });
 }
 
+//Called when the client press on the submit button of the signup form
 export function createOnSubmit(
     { username, password, email, repeatedPassword, navigate },
     setErrors
@@ -49,7 +52,3 @@ export function createOnSubmit(
         }
     };
 }
-
-/*function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}*/

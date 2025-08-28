@@ -1,3 +1,5 @@
+//Using REST-API to send the signup data to the server
+
 export function submitSignupData({ username, email, password }) {
     return fetch('http://localhost:8080/api/signup', {
         method: 'POST',

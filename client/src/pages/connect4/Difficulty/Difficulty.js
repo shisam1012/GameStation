@@ -1,12 +1,18 @@
-import Select from 'react-select';
 import { useState } from 'react';
-import { createOnSubmit } from './DifficultyService';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UserLogin } from '../../../context/LoginContext';
-import '../../../styles/Form.css';
-import Bar from '../../../components/Bar/Bar';
-import BackButton from '../../../components/BackButton/BackButton';
+import Select from 'react-select';
 
+import BackButton from '../../../components/BackButton/BackButton';
+import Bar from '../../../components/Bar/Bar';
+import { UserLogin } from '../../../context/LoginContext';
+import { createOnSubmit } from './DifficultyService';
+
+import '../../../styles/Form.css';
+
+/**
+ *
+ * @returns the difficulty selection page - includes the bar component, back button, select with 3 options, submit button and some information about the score
+ */
 function Connect4Difficulty() {
     //there are 3 options for difficulties
     const options = [

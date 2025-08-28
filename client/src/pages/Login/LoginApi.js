@@ -1,9 +1,9 @@
-//Using REST-API to send the register data to the server
+//Using REST-API to send the login data to the server
 
 export function submitLoginData({ username, password }) {
     const data = new URLSearchParams({
         username,
-        password, //still wothout hashing
+        password, //still without hashing
     });
 
     return fetch(`http://localhost:8080/api/login?${data.toString()}`, {

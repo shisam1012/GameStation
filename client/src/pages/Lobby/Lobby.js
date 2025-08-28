@@ -1,13 +1,21 @@
-import Bar from '../../components/Bar/Bar';
-import '../../styles/Lobby.css';
-import { useNavigate } from 'react-router-dom';
-import { /*useEffect,*/ useState } from 'react';
-import { UserLogin } from '../../context/LoginContext';
-import { onClickConnect4, onMouseDownConnect4 } from './LobbyUtils';
+import { useState } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { useNavigate } from 'react-router-dom';
+
+import { onClickConnect4, onMouseDownConnect4 } from './LobbyUtils';
+
+import Bar from '../../components/Bar/Bar';
+import { UserLogin } from '../../context/LoginContext';
+
+import '../../styles/Lobby.css';
+
 //https://react-bootstrap.netlify.app/docs/components/overlays/#api
 
+/**
+ *
+ * @returns the lobby page - includes the bar component, button for connect 4 info and the game button
+ */
 function Lobby() {
     const navigate = useNavigate();
 
