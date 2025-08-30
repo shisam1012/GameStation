@@ -8,7 +8,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.server.connect4.JmsListenerC4;
-import com.example.server.connect4.game.GameHandlerC4;
+import com.example.server.connect4.game.GameController;
+import com.example.server.connect4.game.GameService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.util.Map;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Responsibilities:
  *  - Receiving and processing messages from clients
  *  - Managing player sessions via SocketsManager
- *  - Communicating with the game logic (GameHandlerC4)
+ *  - Communicating with the game controller (GameController)
  *  - Forwarding player requests to the JMS queues for matchmaking
  */
 @Component
@@ -29,28 +30,32 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private final JmsTemplate jmsTemplate;
     /// JSON serializer/deserializer for parsing incoming messages and creating responses 
     private final ObjectMapper mapper = new ObjectMapper();
-    //Listens to JMS messages for game-related events (opponent found, game updates)
+    //Listener that processes JMS messages for matchmaking and game updates.
     private final JmsListenerC4 jmsListenerConnect4;
-    //Core game logic handler for processing moves and managing game state.
-    private final GameHandlerC4 gameHandler;
+    //Delegates client requests
+    private final GameController gameController;
+    // Access to the service managing active games.
+    private final GameService gameService;
 
     /**
      * Constructor — Spring injects all required beans automatically here.
      * @param sessionManager manages WebSocket sessions
      * @param jmsTemplate handles JMS messaging
-     * @param gameHandler core game logic for Connect 4
+     * @param gameController game controller that will send back the messages for the client
      * @param jmsListenerConnect4 listener for incoming JMS events
+     * @param gameService  used for removing games
      */
-    public WebSocketHandler(SocketsManager sessionManager, JmsTemplate jmsTemplate, GameHandlerC4 gameHandler,JmsListenerC4 jmsListenerConnect4 ) {
+    public WebSocketHandler(SocketsManager sessionManager, JmsTemplate jmsTemplate, GameController gameController,JmsListenerC4 jmsListenerConnect4,GameService gameService ) {
         this.sessionManager = sessionManager; //spring will inject this
         this.jmsTemplate = jmsTemplate;
-        this.gameHandler = gameHandler;//spring will inject this
+        this.gameController = gameController;//spring will inject this
         this.jmsListenerConnect4 = jmsListenerConnect4;//spring will inject this
+        this.gameService = gameService; //spring will inject this
     }
 
     /**
-     * Handle an error from the underlying WebSocket message transport.
-     * Closes the session with SERVER_ERROR status to prevent dangling connections.
+     * Handles low-level transport errors on a WebSocket connection.
+     * If an error occurs, the session is closed with SERVER_ERROR status.
      */
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
@@ -67,6 +72,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
      *  - "init": player joins with username + difficulty - add session & send to matchmaking queue.
      *  -"leave": player leaves → close session, clean up game state, remove from matchmaking.
      *  - "move": player makes a move in a column - forward to game handler.
+     *  - "timeOut": player ran out of time.
      */
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -76,7 +82,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         Map<String, Object> json = mapper.readValue(payload, new TypeReference<Map<String, Object>>() {});
         String type = (String) json.get("type");
         String username = (String) json.get("username");
-        if (username == null) {
+        if (username == null) {  //should not happen
             System.err.println("The message is missing a username.");
         }
         else {
@@ -99,7 +105,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         }
                     }
                     // Remove from game state and matchmaking queues
-                    gameHandler.removeGame(username);
+                    gameService.removeGame(username);
                     sessionManager.removeSession(username);
                     jmsListenerConnect4.removeFromAllQueues(username);
                     break;
@@ -107,7 +113,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 case "move": // player makes a move in the game 
                     Integer column = (Integer) json.get("column");
                     if (column != null) {
-                        gameHandler.handleMove(username, column);
+                        gameController.handleMove(username, column);
                     } else {
                         System.err.println("Invalid move message received: missing a column");
                     }
@@ -115,7 +121,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 case "timeOut":
                     if (username != null) {
                         System.out.println("User timed out: " + username);
-                        gameHandler.handleTimeOut(username);
+                        gameController.handleTimeOut(username);
                     }
                     break;
 
@@ -126,14 +132,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     /**
      * Called when a WebSocket connection is closed.
-     * Cleans up session data and notifies the game handler that the player disconnected.
+     * Cleans up session data and notifies the game controller that the player disconnected.
      */
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         System.out.println("Connection closed. Status: " + status);
         String username = sessionManager.getUsernameBySession(session);
         if (username != null) {
-            gameHandler.handlePlayerDisconnected(username);  
+            gameController.handlePlayerDisconnected(username);  
             sessionManager.removeSession(username);
         }
     }

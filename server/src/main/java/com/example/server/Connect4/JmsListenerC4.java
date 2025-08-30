@@ -1,13 +1,15 @@
 package com.example.server.connect4;
 
-import com.example.server.connect4.game.C4Controller;
-import com.example.server.connect4.game.GameHandlerC4;
+import com.example.server.connect4.game.GameObject;
+//import com.example.server.connect4.game.GameController;
+import com.example.server.connect4.game.GameService;
 import com.example.server.connect4.sockets.SocketsManager;
 import com.google.gson.Gson;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-import java.util.LinkedList;
+//import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * JMS listener for the Connect 4 game queues.
@@ -23,19 +25,19 @@ import java.util.Queue;
 public class JmsListenerC4 {
 
     // Waiting queues for each difficulty level
-    private final Queue<String> waitingPlayersEasy = new LinkedList<>();
-    private final Queue<String> waitingPlayersMedium = new LinkedList<>();
-    private final Queue<String> waitingPlayersHard = new LinkedList<>();
+    private final Queue<String> waitingPlayersEasy = new ConcurrentLinkedQueue<>();
+    private final Queue<String> waitingPlayersMedium = new ConcurrentLinkedQueue<>();
+    private final Queue<String> waitingPlayersHard = new ConcurrentLinkedQueue<>();
     // Manages WebSocket sessions and sends messages to players
     private final SocketsManager sessionManager;
     // For converting Java objects to JSON
     private final Gson gson = new Gson();
-    // Handles game logic
-    private final GameHandlerC4 gameHandler;
+    // Handles game logic   
+    private final GameService gameService;
 
-    public JmsListenerC4(SocketsManager sessionManager, GameHandlerC4 gameHandler) {
+    public JmsListenerC4(SocketsManager sessionManager, GameService gameService) {
         this.sessionManager = sessionManager;
-        this.gameHandler = gameHandler;
+        this.gameService = gameService;
     }
     
     //Listens for players joining the "easy" difficulty queue
@@ -97,9 +99,8 @@ public class JmsListenerC4 {
             }
 
             // Create the game
-            C4Controller game = new C4Controller(username1, username2, difficulty);
-            gameHandler.registerGame(username1, username2, game);
-
+            GameObject game = new GameObject(username1, username2, difficulty);
+            gameService.registerGame(username1, username2, game);
             // Convert board to JSON
             String boardJson = gson.toJson(game.getBoard());
 
