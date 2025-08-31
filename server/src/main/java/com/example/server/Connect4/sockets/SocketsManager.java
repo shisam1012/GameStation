@@ -32,6 +32,8 @@ public class SocketsManager implements DisposableBean {
         WebSocketSession oldSession = sessions.get(username);
         if (oldSession != null && oldSession.isOpen()) {
             try {
+                sendMessageToPlayer(username,  String
+                    .format("{\"type\":\"disconnectSocket\", \"message\": \"You tried to open a new connection - so this one is closed. If the game started already - this will count as a loss...\"}"));
                 oldSession.close(CloseStatus.NORMAL);
             } catch (IOException e) {
                 e.printStackTrace();

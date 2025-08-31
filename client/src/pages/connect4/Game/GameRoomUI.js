@@ -4,7 +4,7 @@ import BackButton from '../../../components/BackButton/BackButton';
 import Timer from '../../../components/Timer';
 import GameBoardUIC4 from './C4BoardUI';
 
-// GameRoomUI: handles the UI of the Connect 4 game room
+//GameRoomUI: handles the UI of the Connect 4 game room
 // Props:
 // - username: current player's username
 // - statusMessage: message to display game status
@@ -33,7 +33,7 @@ function GameRoomUI({
                     {/* Display whose turn it is */}
                     <h2>
                         {isMyTurn
-                            ? 'Your turn'
+                            ? 'Your turn - click on the upper row to select where to drop your disc'
                             : "Waiting for your opponent's move"}
                     </h2>
                     {/* Timer component handles turn time */}

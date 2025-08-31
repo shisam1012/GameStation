@@ -1,13 +1,20 @@
-import Select from 'react-select';
 import { useState } from 'react';
-import { createOnSubmit } from './DifficultyService';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { UserLogin } from '../../../context/LoginContext';
-import '../../../styles/Form.css';
-import Bar from '../../../components/Bar/Bar';
-import BackButton from '../../../components/BackButton/BackButton';
+import Select from 'react-select';
 
+import BackButton from '../../../components/BackButton/BackButton';
+import Bar from '../../../components/Bar/Bar';
+import { UserLogin } from '../../../context/LoginContext';
+import { createOnSubmit } from './DifficultyService';
+
+import '../../../styles/Form.css';
+
+/**
+ *
+ * @returns the difficulty selection page - includes the bar component, back button, select with 3 options, submit button and some information about the score
+ */
 function Connect4Difficulty() {
+    //there are 3 options for difficulties
     const options = [
         { value: 'Easy', label: 'Easy' },
         { value: 'Medium', label: 'Medium' },
@@ -18,10 +25,13 @@ function Connect4Difficulty() {
     const location = useLocation();
     const [difficulty, setDifficulty] = useState(options[0]);
 
+    //if the user is not logged in - can not choose a difficulty
     if (!userLoggedIn) {
         return <p>Please login to see choose a difficulty.</p>;
     }
+
     const onSubmit = createOnSubmit(
+        //function from DifficultyService.js
         difficulty.value,
         navigate,
         userLoggedIn.username,
@@ -32,6 +42,7 @@ function Connect4Difficulty() {
         setDifficulty(selectedOption);
     };
 
+    //returns the difficulty selection page with all the components and info needed
     return (
         <div>
             <Bar />

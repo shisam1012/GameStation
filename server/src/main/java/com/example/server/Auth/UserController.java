@@ -3,7 +3,6 @@ package com.example.server.auth;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import java.util.Map;
 @RequestMapping("/api")
 
 /**
- * REST controller that handles the HTTP requests from the client
+ * REST controller that handles the HTTP requests from the client (sign up and login requests)
  * Provides endpoints for user sign up and login. 
  * Interacts with UserDAO to connect with the DB
  */
@@ -34,8 +33,9 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(Map.of("error", "Username or email already exists."));
             }
-            //if the username and email are unique insert into the users table the new user
+            //if the username and email are unique insert into the users table and user_info table the new user
             UserDAO.insertUser(user);
+            System.out.println("User " + user.getUsername() + " signed in successfully" );
             return ResponseEntity.ok(Map.of("message", "User registered successfully"));
         } catch (SQLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -62,7 +62,8 @@ public class UserController {
 
             //check if the user exists in the table, if not return an error message
             if (UserDAO.checkUser(user)) {
-                return ResponseEntity.ok(Map.of("message", "User registered successfully"));
+                System.out.println("User " + username + " logged in successfully" );
+                return ResponseEntity.ok(Map.of("message", "User log in successfully"));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Invalid username or password"));

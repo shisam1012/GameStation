@@ -46,6 +46,13 @@ export function useGameRoomC4Api(socket, username, callbacks) {
                         popMessage(data.message);
                         break;
 
+                    case 'disconnectSocket':
+                        endGame(data.message);
+                        break;
+
+                    case 'waiting': //already handled in DifficultyAPI (just printing the data)
+                        break;
+
                     default:
                         console.log('Unhandled message:', data);
                 }

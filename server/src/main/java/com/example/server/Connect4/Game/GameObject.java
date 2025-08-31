@@ -4,7 +4,7 @@ package com.example.server.connect4.game;
  * Controller class for a Connect 4 game.
  * Holds the game state: players, board, current turn, difficulty, and status.
  */
-public class C4Controller {
+public class GameObject {
     private final int ROWS = 6;
     private final int COLS = 7;
     private int[][] board; // 0 = empty, 1 = player1's disc, 2 = player2's disc
@@ -22,7 +22,7 @@ public class C4Controller {
      * @param player2   username of player 2
      * @param difficulty chosen difficulty level
      */
-    public C4Controller(String player1, String player2, String difficulty) {
+    public GameObject(String player1, String player2, String difficulty) {
         this.player1 = player1;
         this.player2 = player2;
         this.board = new int[ROWS][COLS];

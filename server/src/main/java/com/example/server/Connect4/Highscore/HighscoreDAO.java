@@ -18,6 +18,7 @@ public class HighscoreDAO {
      * @return a list of UserInfo objects representing the top 10 players
      * @throws SQLException if a database access error occurs
      */
+
     public static List<UserInfo> getTop10Scores() throws SQLException {
         List<UserInfo> topScores = new ArrayList<>();
         String query = "SELECT username, games_count, wins_count, total_score " +

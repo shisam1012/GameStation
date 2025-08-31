@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
 function Timer({ initialTime = 30, isMyTurn, onTimeOut }) {
+    //!for future changes - set a different time for different difficulties
     const [timeLeft, setTimeLeft] = useState(initialTime);
 
     useEffect(() => {
-        // Reset timer whenever turn changes
+        //reset the timer whenever turn changes
         setTimeLeft(initialTime);
     }, [isMyTurn, initialTime]);
 

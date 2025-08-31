@@ -1,10 +1,17 @@
-import { createOnSubmit } from './SignupUtils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { createOnSubmit } from './SignupUtils.js';
 import Bar from '../../components/Bar/Bar.js';
-import '../../styles/Form.css';
 import BackButton from '../../components/BackButton/BackButton.js';
-function SignUp() {
+
+import '../../styles/Form.css';
+
+/**
+ *
+ * @returns the signup page - includes the bar component, back button, form with 4 fields and a submit button
+ */
+function Signup() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [repeatedPassword, setRepeatedPassword] = useState('');
@@ -85,4 +92,4 @@ function SignUp() {
     );
 }
 
-export default SignUp;
+export default Signup;

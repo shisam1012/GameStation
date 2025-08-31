@@ -9,12 +9,17 @@ import {
 } from './BarLogic.js';
 import { UserLogin } from '../../context/LoginContext.js';
 
+/**
+ *
+ * @returns the Bar component - contains two buttons, depending on the UserLogin context
+ */
 function Bar() {
     const navigate = useNavigate();
     const { userLoggedIn } = UserLogin();
 
     return (
         <div className='bar'>
+            {/*the logo on the left is also a button - navigates back to the lobby*/}
             <img
                 src='/images/logo2.png'
                 alt='Logo'
@@ -23,6 +28,7 @@ function Bar() {
             />
 
             <div>
+                {/*if the user is logged in - show highscore and log out buttons, otherwise show login and signup buttons */}
                 {userLoggedIn ? (
                     <>
                         <button
