@@ -1,6 +1,6 @@
 import './App.css';
 import Lobby from './pages/Lobby/Lobby.js';
-import Signup from './pages/Signup/Signup.js';
+import Signup from './pages/Signup/SignUp.js';
 import Login from './pages/Login/Login.js';
 import Connect4Difficulty from './pages/connect4/Difficulty/Difficulty.js';
 import HighscoreContainer from './pages/Highscore/HighscoreUtils.js';
