@@ -32,8 +32,10 @@ Built as a capstone project to demonstrate real-time interaction, clean architec
 
 more documentation (in Hebrew, but there are also photos:)):
 
-[מסמך תכנון.pdf](https://github.com/user-attachments/files/23028069/default.pdf)
 
-[תיאור פונקציונלי.pdf](https://github.com/user-attachments/files/23028071/default.pdf)
+
+[תיאור פונקציונלי.pdf](https://github.com/user-attachments/files/23030078/default.pdf)
+
+[מסמך תכנון.pdf](https://github.com/user-attachments/files/23030091/default.pdf)
 
 [הוראות התקנה.pdf](https://github.com/user-attachments/files/23028077/readme.pdf)
