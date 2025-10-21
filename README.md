@@ -1,11 +1,17 @@
-<img width="494" height="162" alt="image" src="https://github.com/user-attachments/assets/7b2cc594-5799-4344-81ca-d73626ee9748" />
+<p align="center">
+<img width="198" height="63" alt="image" src="https://github.com/user-attachments/assets/8a08f7df-8055-4799-82db-688928206415" />
+</p>
 
 This is a full-stack web application for playing Connect Four online. 
 It includes a React front-end, a Spring Boot back-end, and a MySQL database. 
 Built as a capstone project to demonstrate real-time interaction, clean architecture, and modern development practices.
 
-<img width="86" height="90" alt="image" src="https://github.com/user-attachments/assets/8f542d14-4262-4ea3-98a0-674ee5bbc068" />
+<p align="center">
+<img width="107" height="106" alt="image" src="https://github.com/user-attachments/assets/43fefcd1-2c17-41f0-a636-cfc1086d4c88" />
 
+</p>
+
+-----------------
 
 🚀 Features
 - User authentication (registration & login)
@@ -18,14 +24,16 @@ Built as a capstone project to demonstrate real-time interaction, clean architec
 
 
 🛠️ Technologies Used
+
 **Frontend:** React.js, HTML, CSS, JavaScript  
 **Backend:** Java, Spring Boot, ActiveMQ (JMS), MySQL  
 **Tools:** Git, VS Code
 
 
-more documentation(in Hebrew, but there are also photos:)):
-
+more documentation (in Hebrew, but there are also photos:)):
 
 [מסמך תכנון.pdf](https://github.com/user-attachments/files/23028069/default.pdf)
+
 [תיאור פונקציונלי.pdf](https://github.com/user-attachments/files/23028071/default.pdf)
-[readme.pdf](https://github.com/user-attachments/files/23028077/readme.pdf)
+
+[הוראות התקנה.pdf](https://github.com/user-attachments/files/23028077/readme.pdf)
