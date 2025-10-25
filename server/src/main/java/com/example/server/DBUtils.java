@@ -1,6 +1,9 @@
 package com.example.server;
 
 import org.springframework.stereotype.Component;
+
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,6 +17,8 @@ public class DBUtils {
     private static final int POOL_SIZE = 10;// 1; //for checking :)
     // Thread-safe queue to hold available DB connections
     private static final Queue<Connection> connectionPool = new ArrayDeque<>();
+
+    private static final Dotenv dotenv = Dotenv.load();
 
     //Loading the driver one time
     static {
@@ -30,9 +35,9 @@ public class DBUtils {
     //Creating a new connection to the DB 
     //Using JDBC for the connection
     private static Connection createNewConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/gamestation?useSSL=false&allowPublicKeyRetrieval=true";
-        String user = "root";
-        String password = "SD!123sa";
+        String url = dotenv.get("DB_URL");
+        String user = dotenv.get("DB_USER");
+        String password = dotenv.get("DB_PASSWORD");
         return DriverManager.getConnection(url, user, password);
     }
 
